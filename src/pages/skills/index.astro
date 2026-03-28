@@ -1,0 +1,116 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Card from '../../components/Card.astro';
+import Table from '../../components/Table.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<Layout title="Skills — Claude Code Cheatsheet">
+  <Navbar />
+  <PageHeader
+    title="Skills personnalises"
+    description="Creer des templates de taches reutilisables pour etendre les capacites de Claude Code."
+  />
+
+  <main class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+
+    <!-- Ou placer les skills -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Ou placer les skills</h2>
+      <Table
+        headers={['Emplacement', 'Portee']}
+        rows={[
+          ['.claude/skills/', 'Projet — partage avec l\'equipe via git'],
+          ['~/.claude/skills/', 'Personnel — disponible dans tous les projets'],
+          ['Plugins', 'Marketplace — installe depuis des registres'],
+        ]}
+      />
+    </section>
+
+    <!-- Structure -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Structure d'un skill</h2>
+      <CodeBlock title="mon-skill/" lang="tree">
+        <pre><code>{`mon-skill/
+├── SKILL.md           # Obligatoire : frontmatter + instructions
+├── template.md        # Optionnel : template a remplir
+├── examples/          # Optionnel : exemples de sortie
+└── scripts/           # Optionnel : scripts d'aide`}</code></pre>
+      </CodeBlock>
+    </section>
+
+    <!-- Frontmatter -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Frontmatter SKILL.md</h2>
+      <CodeBlock title="SKILL.md" lang="yaml">
+        <pre><code>{`---
+name: mon-skill                    # minuscules, tirets, max 64 chars
+description: Ce que fait ce skill  # Quand Claude doit le charger
+argument-hint: [args]              # Indice pour l'autocompletion
+disable-model-invocation: true     # Seul l'utilisateur peut invoquer
+user-invocable: false              # Seul Claude peut invoquer
+allowed-tools: Read, Grep          # Outils autorises sans permission
+model: claude-opus-4-6             # Modele specifique pour ce skill
+context: fork                      # Executer dans un subagent isole
+agent: Explore                     # Type de subagent (Explore, Plan...)
+---
+
+Vos instructions ici...`}</code></pre>
+      </CodeBlock>
+    </section>
+
+    <!-- Variables -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Variables de substitution</h2>
+      <Table
+        headers={['Variable', 'Description']}
+        rows={[
+          ['$ARGUMENTS', 'Tous les arguments passes au skill'],
+          ['$ARGUMENTS[N]', 'Nieme argument (base 0), aussi $0, $1...'],
+          ['${CLAUDE_SESSION_ID}', 'ID de la session en cours'],
+          ['${CLAUDE_SKILL_DIR}', 'Repertoire contenant SKILL.md'],
+        ]}
+      />
+    </section>
+
+    <!-- Injection dynamique -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Injection de contexte dynamique</h2>
+      <p class="text-sand-500 text-sm mb-4">Utilisez des backticks avec <code>!</code> pour injecter la sortie de commandes shell dans votre skill.</p>
+      <CodeBlock title="Exemple : contexte PR" lang="yaml">
+        <pre><code>{`---
+name: pr-summary
+---
+
+## Contexte de la pull request
+- Diff de la PR : !\`gh pr diff\`
+- Commentaires : !\`gh pr view --comments\`
+
+Resume cette PR...`}</code></pre>
+      </CodeBlock>
+    </section>
+
+    <!-- Exemple complet -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Exemple complet</h2>
+      <CodeBlock title="explain-code/SKILL.md" lang="yaml">
+        <pre><code>{`---
+name: explain-code
+description: Expliquer du code avec des diagrammes et des analogies
+---
+
+Quand tu expliques du code, inclus toujours :
+
+1. **Analogie** : Compare avec quelque chose du quotidien
+2. **Diagramme** : Utilise de l'ASCII art pour montrer le flux
+3. **Pas a pas** : Explication etape par etape
+4. **Piege** : Erreur courante ou malentendu`}</code></pre>
+      </CodeBlock>
+    </section>
+
+  </main>
+  <Footer />
+</Layout>

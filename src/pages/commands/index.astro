@@ -1,0 +1,111 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Card from '../../components/Card.astro';
+import Table from '../../components/Table.astro';
+---
+
+<Layout title="Commandes — Claude Code Cheatsheet">
+  <Navbar />
+  <PageHeader
+    title="Commandes"
+    description="Toutes les slash commands et options CLI pour piloter Claude Code."
+  />
+
+  <main class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+
+    <!-- Slash Commands -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Slash Commands</h2>
+      <p class="text-sand-500 text-sm mb-6">Commandes integrees disponibles dans chaque session.</p>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
+        <Card title="/help">Afficher les commandes disponibles</Card>
+        <Card title="/compact">Resumer la conversation pour liberer du contexte</Card>
+        <Card title="/clear">Effacer la session et repartir a zero</Card>
+        <Card title="/init">Generer un CLAUDE.md en analysant le codebase</Card>
+        <Card title="/memory">Voir et editer CLAUDE.md, regles, memoire auto</Card>
+        <Card title="/cost">Afficher le cout estime de la session</Card>
+        <Card title="/context">Voir l'utilisation de la fenetre de contexte</Card>
+        <Card title="/hooks">Parcourir les hooks configures par evenement</Card>
+        <Card title="/permissions">Voir et gerer les regles de permissions</Card>
+        <Card title="/config">Ouvrir les parametres (theme, modele...)</Card>
+        <Card title="/resume">Choisir une session passee a reprendre</Card>
+        <Card title="/agents">Lister tous les subagents configures</Card>
+      </div>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Commandes Skill</h3>
+      <Table
+        headers={['Commande', 'Description']}
+        rows={[
+          ['/batch &lt;instruction&gt;', 'Orchestrer des changements a grande echelle (5-30 agents en parallele)'],
+          ['/claude-api', 'Charger la reference API Claude pour votre langage'],
+          ['/debug [description]', 'Diagnostiquer la session en cours via le log de debug'],
+          ['/loop [intervalle] &lt;prompt&gt;', 'Executer un prompt de maniere repetee (defaut 10m)'],
+          ['/simplify [focus]', 'Analyser les changements recents pour la qualite et la reutilisation'],
+        ]}
+      />
+    </section>
+
+    <!-- CLI Flags -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Flags CLI</h2>
+      <p class="text-sand-500 text-sm mb-6">Options en ligne de commande pour demarrer et configurer les sessions.</p>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Demarrer une session</h3>
+      <Table
+        headers={['Commande', 'Description']}
+        rows={[
+          ['claude', 'Demarrer une session interactive'],
+          ['claude "requete"', 'Demarrer avec un prompt initial'],
+          ['claude -p "requete"', 'Mode print (non-interactif, quitte apres)'],
+          ['claude -c', 'Continuer la session la plus recente'],
+          ['claude -r "nom"', 'Reprendre une session nommee'],
+          ['claude -n "mon-travail"', 'Nommer la session'],
+        ]}
+      />
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Controle des outils et permissions</h3>
+      <Table
+        headers={['Flag', 'Effet']}
+        rows={[
+          ['--tools "Bash,Edit,Read"', 'Restreindre les outils disponibles'],
+          ['--allowedTools "Bash(git *)"', 'Pre-approuver des outils specifiques'],
+          ['--disallowedTools "Bash(rm *)"', 'Bloquer des commandes specifiques'],
+          ['--permission-mode plan', 'Demarrer en mode Plan (lecture seule)'],
+        ]}
+      />
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Contexte et modeles</h3>
+      <Table
+        headers={['Flag', 'Effet']}
+        rows={[
+          ['--add-dir ../lib ../shared', 'Ajouter des repertoires au contexte'],
+          ['--model opus', 'Choisir le modele (opus, sonnet, haiku)'],
+          ['--effort high', 'Definir le niveau de raisonnement'],
+          ['--system-prompt "Tu es..."', 'Remplacer le prompt systeme'],
+          ['--append-system-prompt "Aussi..."', 'Ajouter au prompt systeme'],
+        ]}
+      />
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Options avancees</h3>
+      <Table
+        headers={['Flag', 'Effet']}
+        rows={[
+          ['--max-turns 3', 'Limiter le nombre de tours agentiques'],
+          ['--max-budget-usd 5.00', 'Arreter si le cout depasse la limite'],
+          ['--json-schema \'{...}\'', 'Obtenir une sortie JSON structuree'],
+          ['--output-format json', 'Sortie JSON en mode print'],
+          ['--chrome', 'Activer le controle du navigateur'],
+          ['--worktree feature-auth', 'Creer un git worktree isole'],
+          ['--debug "api,mcp"', 'Debugger des categories specifiques'],
+          ['--verbose', 'Sortie complete tour par tour'],
+        ]}
+      />
+    </section>
+
+  </main>
+  <Footer />
+</Layout>

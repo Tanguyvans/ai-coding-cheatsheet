@@ -1,0 +1,178 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Card from '../../components/Card.astro';
+import Table from '../../components/Table.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<Layout title="Hooks & MCP — Claude Code Cheatsheet">
+  <Navbar />
+  <PageHeader
+    title="Hooks & MCP"
+    description="Automatiser des actions avec les hooks et connecter des outils externes via le Model Context Protocol."
+  />
+
+  <main class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+
+    <!-- HOOKS -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Hooks</h2>
+      <p class="text-sand-500 text-sm mb-6">Commandes shell executees en reponse aux evenements du cycle de vie de Claude Code.</p>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Evenements du cycle de vie</h3>
+      <Table
+        headers={['Evenement', 'Declenchement', 'Matcher']}
+        rows={[
+          ['PreToolUse', 'Avant l\'execution d\'un outil (peut bloquer)', 'nom de l\'outil (regex)'],
+          ['PostToolUse', 'Apres la reussite d\'un outil', 'nom de l\'outil'],
+          ['PostToolUseFailure', 'Apres l\'echec d\'un outil', 'nom de l\'outil'],
+          ['UserPromptSubmit', 'Quand vous soumettez un prompt', '—'],
+          ['Stop', 'Quand Claude finit de repondre', '—'],
+          ['SessionStart', 'Debut ou reprise de session', 'startup, resume, clear'],
+          ['SessionEnd', 'Fin de session', 'clear, logout, exit'],
+          ['SubagentStart / SubagentStop', 'Cycle de vie des subagents', 'type d\'agent'],
+          ['Notification', 'Notification envoyee', 'permission_prompt, idle...'],
+          ['PreCompact / PostCompact', 'Compaction du contexte', 'manual, auto'],
+        ]}
+      />
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Types de hooks</h3>
+      <div class="grid sm:grid-cols-2 gap-3 mb-6">
+        <Card title="Commande" badge="le plus courant">
+          <CodeBlock lang="json">
+            <pre><code>{`{
+  "type": "command",
+  "command": "echo 'hello'",
+  "timeout": 600
+}`}</code></pre>
+          </CodeBlock>
+        </Card>
+        <Card title="Prompt" badge="decision LLM">
+          <CodeBlock lang="json">
+            <pre><code>{`{
+  "type": "prompt",
+  "prompt": "Verifie que toutes les taches sont terminees."
+}`}</code></pre>
+          </CodeBlock>
+        </Card>
+        <Card title="Agent" badge="multi-tour">
+          <CodeBlock lang="json">
+            <pre><code>{`{
+  "type": "agent",
+  "prompt": "Verifie que tous les tests passent.",
+  "timeout": 120
+}`}</code></pre>
+          </CodeBlock>
+        </Card>
+        <Card title="HTTP" badge="webhook">
+          <CodeBlock lang="json">
+            <pre><code>{`{
+  "type": "http",
+  "url": "http://localhost:8080/hooks/tool-use",
+  "headers": { "Authorization": "Bearer $TOKEN" }
+}`}</code></pre>
+          </CodeBlock>
+        </Card>
+      </div>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Codes de sortie</h3>
+      <Table
+        headers={['Code', 'Effet']}
+        rows={[
+          ['0', 'L\'action continue — stdout peut contenir du JSON'],
+          ['2', 'Action bloquee — stderr devient le feedback pour Claude'],
+        ]}
+      />
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Exemples pratiques</h3>
+      <CodeBlock title="Formatter automatiquement apres edition (Prettier)" lang="json">
+        <pre><code>{`{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Edit|Write",
+      "hooks": [{
+        "type": "command",
+        "command": "jq -r '.tool_input.file_path' | xargs npx prettier --write"
+      }]
+    }]
+  }
+}`}</code></pre>
+      </CodeBlock>
+
+      <CodeBlock title="Notification macOS quand Claude attend une reponse" lang="json">
+        <pre><code>{`{
+  "hooks": {
+    "Notification": [{
+      "matcher": "",
+      "hooks": [{
+        "type": "command",
+        "command": "osascript -e 'display notification \\"Claude attend votre attention\\" with title \\"Claude Code\\"'"
+      }]
+    }]
+  }
+}`}</code></pre>
+      </CodeBlock>
+    </section>
+
+    <!-- MCP -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">MCP — Model Context Protocol</h2>
+      <p class="text-sand-500 text-sm mb-6">Connecter Claude Code a des outils externes (bases de donnees, APIs, navigateur...).</p>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Methodes d'installation</h3>
+      <div class="grid sm:grid-cols-3 gap-3 mb-6">
+        <Card title="Serveur HTTP">
+          <code class="text-xs">claude mcp add-http-server monserveur http://localhost:3000</code>
+        </Card>
+        <Card title="Serveur SSE">
+          <code class="text-xs">claude mcp add-sse-server monserveur http://localhost:3000/sse</code>
+        </Card>
+        <Card title="Serveur Stdio">
+          <code class="text-xs">claude mcp add-stdio-server monserveur /chemin/vers/serveur</code>
+        </Card>
+      </div>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Configuration dans .mcp.json</h3>
+      <CodeBlock title=".claude/.mcp.json" lang="json">
+        <pre><code>{`{
+  "mcpServers": {
+    "postgres": {
+      "command": "node",
+      "args": ["/chemin/vers/postgres-mcp/index.js"],
+      "env": { "DATABASE_URL": "postgresql://localhost/madb" }
+    },
+    "github": {
+      "url": "https://github.com/username/github-mcp"
+    }
+  }
+}`}</code></pre>
+      </CodeBlock>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Portees</h3>
+      <Table
+        headers={['Emplacement', 'Portee', 'Partage ?']}
+        rows={[
+          ['~/.claude/mcp.json', 'Personnel — tous les projets', 'Non'],
+          ['.claude/.mcp.json', 'Projet — partage avec l\'equipe', 'Oui (git)'],
+          ['~/.claude/settings.json', 'Parametres utilisateur', 'Non'],
+          ['Parametres manages', 'Entreprise', 'Oui'],
+        ]}
+      />
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Serveurs MCP populaires</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <Card title="GitHub">PRs, issues, revues de code</Card>
+        <Card title="PostgreSQL">Requetes directes en base</Card>
+        <Card title="Sentry">Monitoring d'erreurs et contexte</Card>
+        <Card title="Filesystem">Operations fichiers avancees</Card>
+        <Card title="Puppeteer">Automatisation navigateur</Card>
+        <Card title="Slack">Messages dans les channels</Card>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Layout>

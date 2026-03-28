@@ -1,0 +1,108 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Card from '../../components/Card.astro';
+import Table from '../../components/Table.astro';
+---
+
+<Layout title="Tips & Raccourcis — Claude Code Cheatsheet">
+  <Navbar />
+  <PageHeader
+    title="Tips & Raccourcis"
+    description="Bonnes pratiques, raccourcis clavier et astuces pour etre plus efficace avec Claude Code."
+  />
+
+  <main class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+
+    <!-- Raccourcis -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Raccourcis clavier</h2>
+      <Table
+        headers={['Raccourci', 'Action']}
+        rows={[
+          ['Enter', 'Envoyer le message'],
+          ['Escape', 'Annuler / revenir en arriere'],
+          ['Ctrl+C', 'Annuler / interrompre l\'operation en cours'],
+          ['Ctrl+D', 'Quitter Claude Code'],
+          ['Ctrl+G', 'Ouvrir un editeur externe pour le prompt'],
+          ['Ctrl+S', 'Mettre le prompt en reserve (stash)'],
+          ['Ctrl+R', 'Recherche dans l\'historique'],
+          ['Ctrl+T', 'Afficher/masquer la liste des taches'],
+          ['Ctrl+O', 'Afficher/masquer le transcript detaille'],
+          ['Ctrl+V', 'Coller une image'],
+          ['Shift+Tab', 'Changer de mode de permission'],
+          ['Cmd+P / Meta+P', 'Selecteur de modele'],
+          ['Cmd+T / Meta+T', 'Activer/desactiver la reflexion etendue'],
+          ['Haut/Bas', 'Naviguer dans l\'historique'],
+          ['Tab', 'Accepter l\'autocompletion'],
+          ['Espace', 'Push-to-talk (entree vocale)'],
+        ]}
+      />
+    </section>
+
+    <!-- Keybindings custom -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Raccourcis personnalises</h2>
+      <p class="text-sand-500 text-sm mb-4">Modifier les raccourcis dans <code>~/.claude/keybindings.json</code>.</p>
+
+      <div class="bg-white rounded-lg border border-sand-200 p-5 mb-4">
+        <pre><code>{`{
+  "bindings": [
+    {
+      "context": "Chat",
+      "bindings": {
+        "ctrl+e": "chat:externalEditor",
+        "ctrl+k": "chat:submit",
+        "ctrl+u": null
+      }
+    }
+  ]
+}`}</code></pre>
+      </div>
+    </section>
+
+    <!-- Tips placeholder -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Bonnes pratiques</h2>
+      <p class="text-sand-500 text-sm mb-6">Contenu a venir — les tips seront ajoutes prochainement.</p>
+
+      <div class="grid sm:grid-cols-2 gap-3">
+        <Card title="Donner quelque chose a verifier" badge="prompting">
+          Inclure des cas de test ou la sortie attendue pour que Claude puisse s'auto-verifier.
+        </Card>
+        <Card title="Explorer avant d'implementer" badge="workflow">
+          Demander a Claude de comprendre le codebase avant de coder, en suivant les patterns existants.
+        </Card>
+        <Card title="Referencer des fichiers precis" badge="prompting">
+          Pointer vers des fichiers concrets : <code>Utilise le pattern de src/api/handlers/auth.ts</code>
+        </Card>
+        <Card title="Interrompre et rediriger" badge="workflow">
+          Appuyer sur <code>Ctrl+C</code> pour arreter et rediriger. Ne pas attendre la fin.
+        </Card>
+        <Card title="Nommer les sessions" badge="workflow">
+          <code>claude -n "refactor-auth"</code> puis <code>claude -r "refactor-auth"</code> pour reprendre.
+        </Card>
+        <Card title="Limiter le budget" badge="securite">
+          <code>--max-budget-usd 5.00</code> pour eviter les couts excessifs sur les longues taches.
+        </Card>
+      </div>
+    </section>
+
+    <!-- Workflow -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-4">Workflow type</h2>
+      <div class="flex flex-wrap gap-2 items-center text-sm text-sand-600">
+        {['1. Explorer le codebase', '2. /plan', '3. Implementer', '4. Tester', '5. /simplify', '6. Commit'].map((step, i) => (
+          <>
+            {i > 0 && <span class="text-sand-300">&rarr;</span>}
+            <span class="bg-white border border-sand-200 rounded-md px-3 py-1.5 font-medium text-[0.8125rem]">{step}</span>
+          </>
+        ))}
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Layout>

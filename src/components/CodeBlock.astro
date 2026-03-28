@@ -1,0 +1,20 @@
+---
+interface Props {
+  title?: string;
+  lang?: string;
+}
+
+const { title, lang = '' } = Astro.props;
+---
+
+<div class="rounded-lg overflow-hidden border border-sand-200 mb-4 group">
+  {title && (
+    <div class="bg-sand-100 px-4 py-2 text-xs font-medium text-sand-500 border-b border-sand-200 flex items-center justify-between">
+      <span>{title}</span>
+      {lang && <span class="text-sand-400 font-mono text-[0.6875rem]">{lang}</span>}
+    </div>
+  )}
+  <div class="[&>pre]:rounded-none [&>pre]:border-0 [&>pre]:m-0 relative">
+    <slot />
+  </div>
+</div>

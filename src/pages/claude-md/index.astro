@@ -1,0 +1,188 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Card from '../../components/Card.astro';
+import Table from '../../components/Table.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<Layout title="CLAUDE.md & Settings — Claude Code Cheatsheet">
+  <Navbar />
+  <PageHeader
+    title="CLAUDE.md & Settings"
+    description="Instructions projet, configuration, permissions et modes de fonctionnement."
+  />
+
+  <main class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+
+    <!-- CLAUDE.md -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">CLAUDE.md</h2>
+      <p class="text-sand-500 text-sm mb-6">Fichier d'instructions que Claude lit au debut de chaque session.</p>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Emplacements (priorite decroissante)</h3>
+      <Table
+        headers={['Emplacement', 'Portee']}
+        rows={[
+          ['Manage (/Library/Application Support/ClaudeCode/)', 'Entreprise (macOS)'],
+          ['./CLAUDE.md ou ./.claude/CLAUDE.md', 'Projet'],
+          ['~/.claude/CLAUDE.md', 'Utilisateur (personnel)'],
+          ['sous-repertoire/CLAUDE.md', 'Charge a la demande'],
+        ]}
+      />
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Bonnes pratiques</h3>
+      <div class="grid sm:grid-cols-2 gap-3 mb-6">
+        <Card title="Rester court">Viser 200 lignes max — plus c'est court, mieux Claude respecte</Card>
+        <Card title="Etre precis">Ecrire <code>indentation 2 espaces</code> pas <code>bien formater le code</code></Card>
+        <Card title="Utiliser les imports">Referencer des fichiers avec la syntaxe <code>@chemin/vers/fichier.md</code></Card>
+        <Card title="Eviter les conflits">Verifier les CLAUDE.md imbriques pour les contradictions</Card>
+      </div>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Exemple de CLAUDE.md</h3>
+      <CodeBlock title="CLAUDE.md" lang="markdown">
+        <pre><code>{`# Vue d'ensemble du projet
+Monorepo TypeScript/React avec 3 packages.
+
+## Build & Test
+- Build : \`npm run build\`
+- Test : \`npm test\`
+- Lint : \`npm run lint\`
+
+## Style de code
+- Indentation 2 espaces
+- Preferer const, eviter var
+- JSX dans les fichiers .tsx uniquement
+
+## Workflow Git
+- Branches : feature/, bugfix/, docs/
+- Commits : type(scope): description
+- Toujours lancer les tests avant de commit`}</code></pre>
+      </CodeBlock>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Regles par chemin</h3>
+      <CodeBlock title=".claude/rules/api-rules.md" lang="yaml">
+        <pre><code>{`---
+paths:
+  - "src/api/**/*.ts"
+  - "src/**/*.{ts,tsx}"
+---
+
+# Regles pour les APIs
+- Inclure la validation des entrees
+- Utiliser le format standard de reponse d'erreur
+- Ajouter les commentaires OpenAPI`}</code></pre>
+      </CodeBlock>
+    </section>
+
+    <!-- Settings -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Settings</h2>
+      <p class="text-sand-500 text-sm mb-6">Configurer le comportement, l'environnement et les modeles.</p>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Portees de configuration (priorite decroissante)</h3>
+      <Table
+        headers={['Niveau', 'Fichier']}
+        rows={[
+          ['Manage (entreprise)', 'managed-settings.json'],
+          ['Flags CLI', '--flag au lancement'],
+          ['Projet local', '.claude/settings.local.json'],
+          ['Projet (partage)', '.claude/settings.json'],
+          ['Utilisateur', '~/.claude/settings.json'],
+        ]}
+      />
+    </section>
+
+    <!-- Permissions -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Permissions</h2>
+      <p class="text-sand-500 text-sm mb-6">Controler ce que Claude peut faire dans votre projet.</p>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3">Modes de permission</h3>
+      <Table
+        headers={['Mode', 'Comportement']}
+        rows={[
+          ['default', 'Demande la permission a la premiere utilisation'],
+          ['acceptEdits', 'Accepte automatiquement les editions de fichiers'],
+          ['plan', 'Analyse seulement — pas de modification ni execution'],
+          ['dontAsk', 'Refuse automatiquement sauf si pre-approuve'],
+          ['bypassPermissions', 'Ignore toutes les demandes (dangereux, env isole uniquement)'],
+        ]}
+      />
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Regles de permissions</h3>
+      <CodeBlock title="settings.json" lang="json">
+        <pre><code>{`{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git commit *)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(npm publish)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Edit(/node_modules/**)"
+    ]
+  }
+}`}</code></pre>
+      </CodeBlock>
+      <p class="text-sm text-sand-500 mt-2">Priorite : <strong>deny &gt; ask &gt; allow</strong> — les regles deny gagnent toujours.</p>
+
+      <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Patterns de permissions</h3>
+      <Table
+        headers={['Pattern', 'Correspond a']}
+        rows={[
+          ['Bash', 'Toutes les commandes Bash'],
+          ['Bash(npm run *)', 'Toute commande npm run'],
+          ['Read(./.env)', 'Un fichier specifique'],
+          ['Edit(/src/**/*.ts)', 'Pattern glob'],
+          ['WebFetch(domain:github.com)', 'Un domaine specifique'],
+          ['mcp__github__*', 'Tous les outils MCP GitHub'],
+          ['Agent(Explore)', 'Un type de subagent specifique'],
+        ]}
+      />
+    </section>
+
+    <!-- Arborescence -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Arborescence des fichiers</h2>
+      <p class="text-sand-500 text-sm mb-6">Ou se trouvent tous les fichiers de configuration de Claude Code.</p>
+
+      <div class="grid lg:grid-cols-2 gap-4">
+        <CodeBlock title="~/.claude/ (niveau utilisateur)" lang="tree">
+          <pre><code>{`~/.claude/
+├── CLAUDE.md              # Instructions personnelles
+├── settings.json          # Parametres utilisateur
+├── keybindings.json       # Raccourcis personnalises
+├── .mcp.json              # Serveurs MCP
+├── rules/                 # Regles utilisateur
+├── skills/                # Skills personnels
+├── hooks/                 # Scripts de hooks
+└── projects/
+    └── <id>/memory/       # Memoire auto`}</code></pre>
+        </CodeBlock>
+        <CodeBlock title=".claude/ (niveau projet)" lang="tree">
+          <pre><code>{`.claude/
+├── CLAUDE.md              # Instructions projet
+├── settings.json          # Parametres partages
+├── settings.local.json    # Overrides locaux (gitignore)
+├── .mcp.json              # Serveurs MCP projet
+├── rules/                 # Regles projet
+├── skills/                # Skills projet
+├── agents/                # Subagents personnalises
+├── hooks/                 # Scripts de hooks
+└── worktrees/             # Git worktrees`}</code></pre>
+        </CodeBlock>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Layout>

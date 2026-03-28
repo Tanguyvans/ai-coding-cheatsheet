@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sand-50: #faf8f5;
+  --color-sand-100: #f3efe8;
+  --color-sand-200: #e8e0d4;
+  --color-sand-300: #d4c8b5;
+  --color-sand-400: #b8a68c;
+  --color-sand-500: #9c8568;
+  --color-sand-600: #7d6a52;
+  --color-sand-700: #5e4f3d;
+  --color-sand-800: #3f3529;
+  --color-sand-900: #1f1a14;
+
+  --color-claude-orange: #e07c3e;
+  --color-claude-orange-light: #f4a261;
+  --color-claude-cream: #f9f5ef;
+  --color-claude-brown: #4a3728;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-sand-50);
+    color: var(--color-sand-800);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--color-claude-brown);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  pre {
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.8;
+    background-color: var(--color-sand-900) !important;
+    color: #e2ddd5 !important;
+    border: 1px solid var(--color-sand-800);
+  }
+
+  code {
+    font-family: var(--font-mono);
+  }
+
+  :not(pre) > code {
+    background-color: var(--color-sand-200);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.8em;
+    color: var(--color-claude-brown);
+    font-weight: 500;
+  }
+
+  ::selection {
+    background-color: var(--color-claude-orange);
+    color: white;
+  }
+}
