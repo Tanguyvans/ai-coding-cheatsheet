@@ -7,7 +7,8 @@ interface Props {
 }
 
 const { title = 'Claude Code Cheatsheet', description = 'Le guide de reference pour Claude Code — commandes, skills, hooks, MCP et plus.' } = Astro.props;
-const base = import.meta.env.BASE_URL;
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 ---
 
 <html lang="fr">

@@ -2,13 +2,15 @@
 const base = import.meta.env.BASE_URL;
 const pathname = Astro.url.pathname;
 
+const b = base.endsWith('/') ? base : `${base}/`;
+
 const pages = [
-  { href: base, label: 'Accueil' },
-  { href: `${base}commands/`, label: 'Commandes' },
-  { href: `${base}skills/`, label: 'Skills' },
-  { href: `${base}hooks/`, label: 'Hooks & MCP' },
-  { href: `${base}claude-md/`, label: 'CLAUDE.md' },
-  { href: `${base}tips/`, label: 'Tips' },
+  { href: b, label: 'Accueil' },
+  { href: `${b}commands/`, label: 'Commandes' },
+  { href: `${b}skills/`, label: 'Skills' },
+  { href: `${b}hooks/`, label: 'Hooks & MCP' },
+  { href: `${b}claude-md/`, label: 'CLAUDE.md' },
+  { href: `${b}tips/`, label: 'Tips' },
 ];
 
 function isActive(href: string) {
