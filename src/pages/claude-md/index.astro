@@ -6,6 +6,7 @@ import PageHeader from '../../components/PageHeader.astro';
 import Card from '../../components/Card.astro';
 import Table from '../../components/Table.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
+import Compare from '../../components/Compare.astro';
 ---
 
 <Layout title="CLAUDE.md & Settings — Claude Code Cheatsheet">
@@ -34,9 +35,29 @@ import CodeBlock from '../../components/CodeBlock.astro';
       />
 
       <h3 class="font-display text-xl text-claude-brown mb-3 mt-8">Bonnes pratiques</h3>
-      <div class="grid sm:grid-cols-2 gap-3 mb-6">
-        <Card title="Rester court">Viser 200 lignes max — plus c'est court, mieux Claude respecte</Card>
-        <Card title="Etre precis">Ecrire <code>indentation 2 espaces</code> pas <code>bien formater le code</code></Card>
+
+      <Compare
+        badLabel="Trop vague"
+        goodLabel="Precis"
+        bad='<code>Formate bien le code</code>'
+        good='<code>Indentation 2 espaces, point-virgule obligatoire, single quotes</code>'
+      />
+
+      <Compare
+        badLabel="Trop long"
+        goodLabel="Concis"
+        bad="Un CLAUDE.md de 500 lignes avec des explications detaillees de chaque decision architecturale"
+        good="200 lignes max avec des bullets clairs. Utiliser <code>@docs/architecture.md</code> pour les details"
+      />
+
+      <Compare
+        badLabel="Contradictoire"
+        goodLabel="Coherent"
+        bad='CLAUDE.md racine : <code>Utiliser tabs</code><br/>sous-dossier/CLAUDE.md : <code>Utiliser 2 espaces</code>'
+        good='Un seul endroit pour les regles de formatage, reference par <code>@.claude/rules/code-style.md</code>'
+      />
+
+      <div class="grid sm:grid-cols-2 gap-3 mb-6 mt-4">
         <Card title="Utiliser les imports">Referencer des fichiers avec la syntaxe <code>@chemin/vers/fichier.md</code></Card>
         <Card title="Eviter les conflits">Verifier les CLAUDE.md imbriques pour les contradictions</Card>
       </div>

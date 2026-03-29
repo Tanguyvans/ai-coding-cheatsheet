@@ -5,6 +5,8 @@ import Footer from '../../components/Footer.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Card from '../../components/Card.astro';
 import Table from '../../components/Table.astro';
+import Compare from '../../components/Compare.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
 ---
 
 <Layout title="Tips & Raccourcis — Claude Code Cheatsheet">
@@ -15,6 +17,163 @@ import Table from '../../components/Table.astro';
   />
 
   <main class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+
+    <!-- Context Engineering -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Context engineering</h2>
+      <p class="text-sand-500 text-sm mb-6">Si ton IA code mal, le probleme c'est pas le modele — c'est ce que tu lui donnes.</p>
+
+      <Compare
+        badLabel="Sans contexte"
+        goodLabel="Contexte propre"
+        bad="Lancer Claude Code sans CLAUDE.md, sans fichier ignore. Il aspire tout en vrac — node_modules, dist, logs — et les infos utiles se noient dans le bruit."
+        good={`Un <code>CLAUDE.md</code> qui decrit ta stack, tes conventions, tes commandes de build. Et des <code>permissions.deny</code> pour bloquer ce qu'il ne doit pas toucher.`}
+      />
+
+      <div class="grid sm:grid-cols-2 gap-3 mt-4">
+        <Card title="CLAUDE.md = la memoire du projet" badge="essentiel">
+          Ton agent repart de zero a chaque session. Le CLAUDE.md lui donne l'archi, la stack, les conventions — sans que tu repetes a chaque fois.
+        </Card>
+        <Card title="Moins de contexte = meilleur resultat" badge="perf">
+          Au-dela d'un certain volume, la performance plafonne. Utilise <code>/context</code> pour verifier et <code>/compact</code> pour reduire.
+        </Card>
+      </div>
+    </section>
+
+    <!-- Skills avancees -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Skills : les vrais tips</h2>
+      <p class="text-sand-500 text-sm mb-6">Ce qu'Anthropic a appris apres des centaines de skills en production.</p>
+
+      <h3 class="font-display text-lg text-claude-brown mb-3">Un skill c'est un DOSSIER, pas un fichier</h3>
+
+      <Compare
+        badLabel="Basique"
+        goodLabel="Puissant"
+        bad="Un seul <code>SKILL.md</code> avec 500 lignes d'instructions. Claude charge tout d'un coup et se perd."
+        good={`Un dossier avec SKILL.md court + sous-fichiers (<code>references/</code>, <code>examples/</code>, <code>scripts/</code>). Claude lit le principal et va chercher les details au besoin — c'est le progressive disclosure.`}
+      />
+
+      <CodeBlock title="Structure recommandee" lang="tree">
+        <pre><code>{`mon-skill/
+├── SKILL.md              # Instructions principales (court)
+├── references/
+│   └── api.md            # Ref API chargee a la demande
+├── examples/
+│   └── output-sample.md  # Exemple de sortie attendue
+├── gotchas.md            # Pieges connus (le fichier le plus utile)
+└── scripts/
+    └── validate.sh       # Script que Claude peut executer`}</code></pre>
+      </CodeBlock>
+
+      <h3 class="font-display text-lg text-claude-brown mb-3 mt-8">Le fichier gotchas — le plus utile</h3>
+      <p class="text-sand-500 text-sm mb-4">A chaque fois que Claude fait une erreur, note-la dans <code>gotchas.md</code>. Apres plusieurs iterations, ton skill devient inarretable.</p>
+
+      <CodeBlock title="gotchas.md" lang="markdown">
+        <pre><code>{`# Gotchas
+
+- Ne JAMAIS utiliser \`any\` comme type — toujours typer explicitement
+- Le endpoint /api/auth attend un header X-Session-Token, pas Authorization
+- Les tests doivent tourner avec \`pnpm test\`, pas \`npm test\`
+- Le fichier .env.local n'est PAS committe — copier .env.example
+- Les migrations Prisma necessitent \`pnpm db:push\` avant les tests`}</code></pre>
+      </CodeBlock>
+
+      <h3 class="font-display text-lg text-claude-brown mb-3 mt-8">Ne pas trop cadrer</h3>
+
+      <Compare
+        badLabel="Trop de rails"
+        goodLabel="Info sans rails"
+        bad="Des instructions ultra-detaillees qui dictent chaque etape. Claude suit a la lettre et perd sa capacite a s'adapter au contexte."
+        good={`Donner l'information et les contraintes, pas le chemin exact. Claude sait coder — il a besoin de contexte, pas de micro-management.`}
+      />
+    </section>
+
+    <!-- Prompting -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Ecrire de bons prompts</h2>
+      <p class="text-sand-500 text-sm mb-6">La qualite du prompt determine la qualite du resultat.</p>
+
+      <Compare
+        bad='<code>Ecris une fonction qui trie un tableau</code>'
+        good='<code>Ecris une fonction quicksort en TypeScript qui trie des nombres. Ajoute des tests pour les cas limites (vide, un seul element, deja trie)</code>'
+      />
+
+      <Compare
+        bad='<code>Corrige le bug</code>'
+        good={`<code>Le formulaire de login renvoie une erreur 403 quand l'email contient un +. Regarde src/api/auth.ts</code>`}
+      />
+
+      <Compare
+        bad='<code>Refactore le code</code>'
+        good='<code>Extrais la logique de validation de src/handlers/order.ts dans un module separe, en suivant le pattern de src/handlers/user.ts</code>'
+      />
+
+      <Compare
+        bad='<code>Ca marche pas</code>'
+        good={`<code>npm run build echoue avec "Cannot find module ./utils". J'ai renomme le fichier en utils.ts mais les imports n'ont pas ete mis a jour</code>`}
+      />
+    </section>
+
+    <!-- Piloter Claude -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Piloter Claude efficacement</h2>
+
+      <Compare
+        badLabel="Trop vague"
+        goodLabel="Precis et verifiable"
+        bad='<code>Fais en sorte que ca marche bien</code>'
+        good='<code>Le test src/auth.test.ts doit passer. Lance-le apres chaque modification pour verifier</code>'
+      />
+
+      <Compare
+        badLabel="Tout d'un coup"
+        goodLabel="Etape par etape"
+        bad={`<code>Construis tout le systeme d'authentification avec OAuth, sessions, refresh tokens et UI</code>`}
+        good='<code>Commenceons par le endpoint POST /auth/login avec email/password. On ajoutera OAuth apres</code>'
+      />
+
+      <Compare
+        badLabel="Pas de reference"
+        goodLabel="Reference claire"
+        bad='<code>Ajoute du style au composant</code>'
+        good='<code>Style le composant comme UserCard dans src/components/UserCard.tsx — meme espacement et couleurs</code>'
+      />
+    </section>
+
+    <!-- Commandes essentielles -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">4 commandes qui changent tout</h2>
+
+      <div class="grid sm:grid-cols-2 gap-3">
+        <Card title="/memory" badge="essentiel">
+          Claude prend des notes tout seul pendant que tu codes — conventions, commandes de build, bugs resolus. Session suivante, il s'en souvient.
+        </Card>
+        <Card title="/simplify" badge="qualite">
+          3 agents en parallele relisent ton code : un pour le code duplique, un pour la qualite, un pour les perfs. Tape <code>/simplify</code> apres chaque feature, avant ta PR.
+        </Card>
+        <Card title="/loop" badge="automatisation">
+          Lance un prompt en boucle. <code>/loop 5m check si le build est passe</code>. Combine avec <code>/simplify</code> : <code>/loop 1h /simplify</code> — ton code se review en continu.
+        </Card>
+        <Card title="/compact" badge="contexte">
+          Resume la conversation pour liberer de l'espace. Essentiel sur les longues sessions pour eviter la degradation.
+        </Card>
+      </div>
+    </section>
+
+    <!-- Autonomie et permissions -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl text-claude-brown mb-2">Autonomie et permissions</h2>
+
+      <Compare
+        badLabel="Dangereux"
+        goodLabel="Maitrise"
+        bad={`<code>--dangerously-skip-permissions</code> sur un projet critique sans backup. Claude peut supprimer des fichiers, ecraser ta config, modifier du code hors scope.`}
+        good={`Utiliser les regles de permissions granulaires dans <code>settings.json</code> : <code>allow</code> pour les commandes courantes, <code>deny</code> pour les dangereuses, <code>ask</code> pour les sensibles.`}
+      />
+
+      <p class="text-sm text-sand-500 mt-3">Le mode <code>--dangerously-skip-permissions</code> a son utilite sur des taches bien cadrees et des projets non critiques. Mais jamais sans backup.</p>
+    </section>
 
     <!-- Raccourcis -->
     <section class="mb-14">
@@ -40,14 +199,10 @@ import Table from '../../components/Table.astro';
           ['Espace', 'Push-to-talk (entree vocale)'],
         ]}
       />
-    </section>
 
-    <!-- Keybindings custom -->
-    <section class="mb-14">
-      <h2 class="font-display text-2xl text-claude-brown mb-4">Raccourcis personnalises</h2>
-      <p class="text-sand-500 text-sm mb-4">Modifier les raccourcis dans <code>~/.claude/keybindings.json</code>.</p>
-
-      <div class="bg-white rounded-lg border border-sand-200 p-5 mb-4">
+      <h3 class="font-display text-lg text-claude-brown mb-3 mt-6">Raccourcis personnalises</h3>
+      <p class="text-sand-500 text-sm mb-3">Modifier les raccourcis dans <code>~/.claude/keybindings.json</code>.</p>
+      <CodeBlock title="~/.claude/keybindings.json" lang="json">
         <pre><code>{`{
   "bindings": [
     {
@@ -60,34 +215,7 @@ import Table from '../../components/Table.astro';
     }
   ]
 }`}</code></pre>
-      </div>
-    </section>
-
-    <!-- Tips placeholder -->
-    <section class="mb-14">
-      <h2 class="font-display text-2xl text-claude-brown mb-4">Bonnes pratiques</h2>
-      <p class="text-sand-500 text-sm mb-6">Contenu a venir — les tips seront ajoutes prochainement.</p>
-
-      <div class="grid sm:grid-cols-2 gap-3">
-        <Card title="Donner quelque chose a verifier" badge="prompting">
-          Inclure des cas de test ou la sortie attendue pour que Claude puisse s'auto-verifier.
-        </Card>
-        <Card title="Explorer avant d'implementer" badge="workflow">
-          Demander a Claude de comprendre le codebase avant de coder, en suivant les patterns existants.
-        </Card>
-        <Card title="Referencer des fichiers precis" badge="prompting">
-          Pointer vers des fichiers concrets : <code>Utilise le pattern de src/api/handlers/auth.ts</code>
-        </Card>
-        <Card title="Interrompre et rediriger" badge="workflow">
-          Appuyer sur <code>Ctrl+C</code> pour arreter et rediriger. Ne pas attendre la fin.
-        </Card>
-        <Card title="Nommer les sessions" badge="workflow">
-          <code>claude -n "refactor-auth"</code> puis <code>claude -r "refactor-auth"</code> pour reprendre.
-        </Card>
-        <Card title="Limiter le budget" badge="securite">
-          <code>--max-budget-usd 5.00</code> pour eviter les couts excessifs sur les longues taches.
-        </Card>
-      </div>
+      </CodeBlock>
     </section>
 
     <!-- Workflow -->
