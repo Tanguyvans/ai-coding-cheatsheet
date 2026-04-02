@@ -6,111 +6,425 @@ import PageHeader from '../../components/PageHeader.astro';
 import Card from '../../components/Card.astro';
 import Table from '../../components/Table.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
+import Accordion from '../../components/Accordion.astro';
+import Tabs from '../../components/Tabs.astro';
+import SkillAnatomy from '../../components/SkillAnatomy.astro';
 ---
 
 <Layout title="Skills — Claude Code Cheatsheet">
   <Navbar />
   <PageHeader
-    title="Skills personnalises"
-    description="Creer des templates de taches reutilisables pour etendre les capacites de Claude Code."
+    title="Skills"
+    description="Des workflows reutilisables pour etendre les capacites de Claude Code."
   />
 
-  <main class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-12 lg:grid lg:grid-cols-[1fr_200px] lg:gap-12">
 
-    <!-- Ou placer les skills -->
-    <section class="mb-14">
-      <h2 class="font-display text-2xl text-claude-brown mb-4">Ou placer les skills</h2>
-      <Table
-        headers={['Emplacement', 'Portee']}
-        rows={[
-          ['.claude/skills/', 'Projet — partage avec l\'equipe via git'],
-          ['~/.claude/skills/', 'Personnel — disponible dans tous les projets'],
-          ['Plugins', 'Marketplace — installe depuis des registres'],
-        ]}
-      />
-    </section>
+    <main>
 
-    <!-- Structure -->
-    <section class="mb-14">
-      <h2 class="font-display text-2xl text-claude-brown mb-4">Structure d'un skill</h2>
-      <CodeBlock title="mon-skill/" lang="tree">
-        <pre><code>{`mon-skill/
-├── SKILL.md           # Obligatoire : frontmatter + instructions
-├── template.md        # Optionnel : template a remplir
-├── examples/          # Optionnel : exemples de sortie
-└── scripts/           # Optionnel : scripts d'aide`}</code></pre>
-      </CodeBlock>
-    </section>
+      <!-- C'est quoi un skill -->
+      <section id="definition" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-2">C'est quoi un skill ?</h2>
+        <p class="text-sand-600 text-sm leading-relaxed mb-4">Un skill, c'est un dossier avec un fichier <code>SKILL.md</code> qui donne a Claude un <strong>playbook</strong> pour une tache precise. Contrairement aux commandes internes (<code>/help</code>, <code>/compact</code>), un skill est base sur un prompt : Claude recoit les instructions et orchestre le travail avec ses outils.</p>
 
-    <!-- Frontmatter -->
-    <section class="mb-14">
-      <h2 class="font-display text-2xl text-claude-brown mb-4">Frontmatter SKILL.md</h2>
-      <CodeBlock title="SKILL.md" lang="yaml">
-        <pre><code>{`---
-name: mon-skill                    # minuscules, tirets, max 64 chars
-description: Ce que fait ce skill  # Quand Claude doit le charger
-argument-hint: [args]              # Indice pour l'autocompletion
-disable-model-invocation: true     # Seul l'utilisateur peut invoquer
-user-invocable: false              # Seul Claude peut invoquer
-allowed-tools: Read, Grep          # Outils autorises sans permission
-model: claude-opus-4-6             # Modele specifique pour ce skill
-context: fork                      # Executer dans un subagent isole
-agent: Explore                     # Type de subagent (Explore, Plan...)
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <Card title="Reutilisable" badge="gain">
+            Encode un workflow une fois, reutilise-le dans toutes tes sessions.
+          </Card>
+          <Card title="Auto-decouvert" badge="magie">
+            Claude active le skill automatiquement quand c'est pertinent — sans taper <code>/</code>.
+          </Card>
+          <Card title="Riche" badge="puissance">
+            Embarque templates, exemples, scripts, et sortie de commandes shell.
+          </Card>
+          <Card title="Partageable" badge="equipe">
+            Committe <code>.claude/skills/</code> dans git — toute l'equipe en profite.
+          </Card>
+        </div>
+
+        <div class="mt-6 p-4 bg-sand-50 border border-sand-200 rounded-lg">
+          <p class="text-sm text-sand-600"><strong class="text-claude-brown">Skill vs CLAUDE.md :</strong> si tu copies-colles le meme prompt entre sessions, c'est un skill. Si c'est une info de contexte permanente (stack, conventions), c'est du CLAUDE.md.</p>
+        </div>
+      </section>
+
+      <!-- Anatomie visuelle -->
+      <section id="anatomie" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-4">Anatomie d'un SKILL.md</h2>
+        <SkillAnatomy />
+      </section>
+
+      <!-- Quel skill creer -->
+      <section id="types" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-2">Quel skill creer ?</h2>
+        <p class="text-sand-500 text-sm mb-4">Apres des centaines de skills en production, Anthropic a identifie des categories recurrentes.</p>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <Card title="Reference de lib / API" badge="connaissance">
+            Comment utiliser correctement une lib, un SDK ou un CLI interne. Inclut des snippets et une liste de gotchas.
+          </Card>
+          <Card title="Verification produit" badge="qualite">
+            Tester que le code marche — couple avec Playwright ou un headless browser. Le plus rentable a perfectionner.
+          </Card>
+          <Card title="Scaffolding & templates" badge="template">
+            Genere du boilerplate specifique a ton codebase : nouveau service, migration, app preconfiguree.
+          </Card>
+          <Card title="Qualite & review" badge="review">
+            Verifie le style, les tests, ou lance une review adversariale. Peut tourner en hook ou GitHub Action.
+          </Card>
+          <Card title="Automatisation d'equipe" badge="workflow">
+            Automatise les workflows repetitifs : standup, creation de tickets, recap hebdo.
+          </Card>
+          <Card title="Runbooks & debugging" badge="ops">
+            Prend un symptome (alerte, erreur) et deroule une investigation multi-outils avec rapport.
+          </Card>
+        </div>
+      </section>
+
+      <!-- Les regles -->
+      <section id="regles" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-2">Les regles d'un bon skill</h2>
+        <p class="text-sand-500 text-sm mb-4">Ce qu'Anthropic a appris apres des centaines de skills en production.</p>
+
+        <div class="grid sm:grid-cols-2 gap-3 mb-4">
+          <Card title="Construis un fichier gotchas" badge="essentiel">
+            Le contenu le plus rentable. A chaque erreur de Claude, note-la dans <code>gotchas.md</code>. Apres quelques iterations, ton skill devient inarretable.
+          </Card>
+          <Card title="La description declenche, pas resume" badge="trigger">
+            Claude scanne les descriptions pour activer les skills. Decris <em>quand</em> l'utiliser, pas ce qu'il fait.
+          </Card>
+          <Card title="Ne dis pas l'evident" badge="focus">
+            Claude sait coder. Focus sur ce qui le sort de ses reflexes — les patterns de ton projet, les conventions non evidentes.
+          </Card>
+          <Card title="Contexte, pas des rails" badge="liberte">
+            Un skill trop prescriptif empeche Claude de s'adapter. Donne les contraintes et l'info, laisse-le choisir le chemin.
+          </Card>
+        </div>
+
+        <Accordion title="Exemple de fichier gotchas.md">
+          <CodeBlock title="gotchas.md" lang="markdown">
+            <pre><code>{`# Gotchas
+
+- Ne JAMAIS utiliser \`any\` comme type — toujours typer explicitement
+- Le endpoint /api/auth attend X-Session-Token, pas Authorization
+- Les tests tournent avec \`pnpm test\`, pas \`npm test\`
+- Les migrations necessitent \`pnpm db:push\` avant les tests`}</code></pre>
+          </CodeBlock>
+        </Accordion>
+      </section>
+
+      <!-- Structure -->
+      <section id="structure" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-2">Structure d'un skill</h2>
+        <p class="text-sand-500 text-sm mb-4">Un skill c'est un <strong>dossier</strong> avec <code>SKILL.md</code> comme point d'entree. Les autres fichiers sont lus par Claude quand il en a besoin.</p>
+
+        <CodeBlock title="mon-skill/" lang="tree">
+          <pre><code>{`mon-skill/
+├── SKILL.md              # Obligatoire : frontmatter + instructions
+├── references/
+│   └── api.md            # Doc API chargee a la demande
+├── examples/
+│   └── output-sample.md  # Exemple de sortie attendue
+├── gotchas.md            # Pieges connus
+└── scripts/
+    └── validate.sh       # Script que Claude peut executer`}</code></pre>
+        </CodeBlock>
+
+        <div class="mt-4 p-4 bg-sand-50 border border-sand-200 rounded-lg">
+          <p class="text-sm text-sand-600"><strong class="text-claude-brown">Conseil :</strong> garde SKILL.md court et pointe vers des sous-fichiers. Un fichier de 500 lignes noie Claude dans le bruit.</p>
+        </div>
+      </section>
+
+      <!-- Frontmatter -->
+      <section id="frontmatter" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-2">Frontmatter SKILL.md</h2>
+        <p class="text-sand-500 text-sm mb-4">Seul <code>description</code> est vraiment important. Le reste est optionnel.</p>
+
+        <CodeBlock title="Les champs essentiels" lang="yaml">
+          <pre><code>{`---
+name: mon-skill                       # Nom = la commande /mon-skill
+description: Quand utiliser ce skill  # Ce que Claude lit pour decider de l'activer
+argument-hint: [args]                 # Indice dans l'autocompletion
 ---
 
-Vos instructions ici...`}</code></pre>
-      </CodeBlock>
-    </section>
+Tes instructions ici...`}</code></pre>
+        </CodeBlock>
 
-    <!-- Variables -->
-    <section class="mb-14">
-      <h2 class="font-display text-2xl text-claude-brown mb-4">Variables de substitution</h2>
-      <Table
-        headers={['Variable', 'Description']}
-        rows={[
-          ['$ARGUMENTS', 'Tous les arguments passes au skill'],
-          ['$ARGUMENTS[N]', 'Nieme argument (base 0), aussi $0, $1...'],
-          ['${CLAUDE_SESSION_ID}', 'ID de la session en cours'],
-          ['${CLAUDE_SKILL_DIR}', 'Repertoire contenant SKILL.md'],
-        ]}
-      />
-    </section>
+        <Accordion title="Options avancees du frontmatter">
+          <Table
+            headers={['Champ', 'Valeur', 'Effet']}
+            rows={[
+              ['disable-model-invocation', 'true', 'Seul le user peut invoquer (deploy, actions sensibles)'],
+              ['user-invocable', 'false', 'Seul Claude peut invoquer (helper interne)'],
+              ['allowed-tools', 'Read, Grep', 'Outils autorises sans demander permission'],
+              ['model', 'claude-opus-4-6', 'Forcer un modele specifique'],
+              ['effort', 'high', 'Niveau de reflexion : low, medium, high, max'],
+              ['context', 'fork', 'Executer dans un subagent isole'],
+              ['agent', 'Explore', 'Type de subagent (Explore, Plan...)'],
+              ['paths', '"*.py"', 'N\'auto-active que sur ces fichiers'],
+            ]}
+          />
+        </Accordion>
+      </section>
 
-    <!-- Injection dynamique -->
-    <section class="mb-14">
-      <h2 class="font-display text-2xl text-claude-brown mb-4">Injection de contexte dynamique</h2>
-      <p class="text-sand-500 text-sm mb-4">Utilisez des backticks avec <code>!</code> pour injecter la sortie de commandes shell dans votre skill.</p>
-      <CodeBlock title="Exemple : contexte PR" lang="yaml">
-        <pre><code>{`---
+      <!-- Variables -->
+      <section id="variables" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-4">Variables et contexte dynamique</h2>
+
+        <Table
+          headers={['Variable', 'Description']}
+          rows={[
+            ['$ARGUMENTS', 'Tous les arguments passes au skill'],
+            ['$0, $1, $2...', 'Arguments par position'],
+            ['${CLAUDE_SESSION_ID}', 'ID de la session en cours'],
+            ['${CLAUDE_SKILL_DIR}', 'Dossier du skill (pour acceder aux scripts, config...)'],
+          ]}
+        />
+
+        <Accordion title="Exemple : /fix-issue 42" open>
+          <CodeBlock title="fix-issue/SKILL.md" lang="yaml">
+            <pre><code>{`---
+name: fix-issue
+description: Corrige une issue GitHub par son numero
+argument-hint: [numero-issue]
+---
+
+Corrige l'issue GitHub #$ARGUMENTS.
+1. Lis l'issue avec \`gh issue view $ARGUMENTS\`
+2. Analyse le code concerne
+3. Implemente le fix et lance les tests
+4. Commit avec "fix: close #$ARGUMENTS"`}</code></pre>
+          </CodeBlock>
+        </Accordion>
+
+        <div class="mt-4">
+          <Accordion title="Injection dynamique de commandes shell">
+            <p class="text-sand-500 text-sm mb-3">Prefixe une commande avec <code>!</code> dans des backticks — sa sortie est injectee quand le skill se charge.</p>
+            <CodeBlock title="pr-summary/SKILL.md" lang="yaml">
+              <pre><code>{`---
 name: pr-summary
+description: Resume la PR courante avec diff et commentaires
 ---
 
-## Contexte de la pull request
-- Diff de la PR : !\`gh pr diff\`
+## Contexte
+- Diff : !\`gh pr diff\`
 - Commentaires : !\`gh pr view --comments\`
 
-Resume cette PR...`}</code></pre>
-      </CodeBlock>
-    </section>
+Resume cette PR en bullet points concis.`}</code></pre>
+            </CodeBlock>
+          </Accordion>
+        </div>
+      </section>
 
-    <!-- Exemple complet -->
-    <section class="mb-14">
-      <h2 class="font-display text-2xl text-claude-brown mb-4">Exemple complet</h2>
-      <CodeBlock title="explain-code/SKILL.md" lang="yaml">
-        <pre><code>{`---
-name: explain-code
-description: Expliquer du code avec des diagrammes et des analogies
+      <!-- Creer un skill -->
+      <section id="creer" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-4">Creer un skill</h2>
+
+        <Tabs tabs={['A la main', 'Avec le Skill Creator']} id="creation-method">
+          <div class="tab-panel active" data-tab-index="0">
+            <CodeBlock title="Terminal" lang="bash">
+              <pre><code>{`# Skill projet (partage via git)
+mkdir -p .claude/skills/mon-skill
+
+# Skill personnel (tous tes projets)
+mkdir -p ~/.claude/skills/mon-skill`}</code></pre>
+            </CodeBlock>
+            <p class="text-sand-500 text-sm mt-3">Cree <code>SKILL.md</code> dans le dossier avec le frontmatter et tes instructions. C'est tout.</p>
+          </div>
+
+          <div class="tab-panel" data-tab-index="1">
+            <p class="text-sand-500 text-sm mb-3">Un meta-skill du repo <a href="https://github.com/anthropics/skills" class="text-claude-orange hover:underline">anthropics/skills</a> qui te guide depuis le chat.</p>
+            <CodeBlock title="Terminal" lang="bash">
+              <pre><code>{`# Installer le plugin
+/plugin marketplace add anthropics/skills
+
+# Lancer le Skill Creator
+/skill-creator`}</code></pre>
+            </CodeBlock>
+            <p class="text-sand-500 text-sm mt-3">Claude te pose des questions, genere le SKILL.md avec les bons fichiers de support, puis le teste.</p>
+          </div>
+        </Tabs>
+      </section>
+
+      <!-- Ou placer & partager -->
+      <section id="installer" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-2">Installer & partager</h2>
+        <p class="text-sand-500 text-sm mb-4">Ou placer tes skills, avec un ordre de priorite en cas de conflit de nom.</p>
+
+        <Table
+          headers={['Emplacement', 'Portee', 'Priorite']}
+          rows={[
+            ['~/.claude/skills/', 'Personnel — tous tes projets', 'Haute'],
+            ['.claude/skills/', 'Projet — partage via git', 'Basse'],
+            ['Plugins', 'Namespace plugin-name:skill-name', 'Pas de conflit'],
+          ]}
+        />
+
+        <Accordion title="Qui peut declencher un skill ?">
+          <Table
+            headers={['Configuration', 'Toi', 'Claude', 'Quand l\'utiliser']}
+            rows={[
+              ['(defaut)', 'Oui', 'Oui', 'Skill courant, auto-decouvert'],
+              ['disable-model-invocation: true', 'Oui', 'Non', 'Deploy, migration, suppression'],
+              ['user-invocable: false', 'Non', 'Oui', 'Helper interne pour d\'autres skills'],
+            ]}
+          />
+          <div class="mt-3 p-3 bg-sand-50 border border-sand-200 rounded-lg">
+            <p class="text-sm text-sand-600"><strong class="text-claude-brown">Conseil :</strong> <code>disable-model-invocation: true</code> pour tout skill qui fait des actions irreversibles.</p>
+          </div>
+        </Accordion>
+
+        <div class="mt-4">
+          <Accordion title="Installer un plugin de skills">
+            <CodeBlock title="Terminal" lang="bash">
+              <pre><code>{`# Installer un plugin
+/plugin marketplace add anthropics/skills
+
+# Voir les skills disponibles
+/skills`}</code></pre>
+            </CodeBlock>
+            <p class="text-sand-500 text-sm mt-3">Les skills de plugins utilisent le namespace <code>plugin-name:skill-name</code> — pas de conflit avec les tiens.</p>
+          </Accordion>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3 mt-4">
+          <Card title="anthropics/skills" badge="officiel">
+            Skills officiels : skill-creator, simplify, batch, claude-api, debug, loop. <a href="https://github.com/anthropics/skills" class="text-claude-orange hover:underline">GitHub</a>
+          </Card>
+          <Card title="awesome-claude-skills" badge="communaute">
+            Collection communautaire : TDD, securite, Playwright, D3.js, shadcn/ui... <a href="https://github.com/travisvn/awesome-claude-skills" class="text-claude-orange hover:underline">GitHub</a>
+          </Card>
+        </div>
+      </section>
+
+      <!-- Techniques avancees -->
+      <section id="avance" class="mb-14 scroll-mt-20">
+        <h2 class="font-display text-2xl text-claude-brown mb-4">Techniques avancees</h2>
+
+        <div class="space-y-3">
+          <Accordion title="Config utilisateur persistante">
+            <p class="text-sand-500 text-sm mb-3">Si ton skill a besoin d'info de l'utilisateur (channel Slack, projet...), stocke-la dans un <code>config.json</code>. Claude le lit ou le demande si absent.</p>
+            <CodeBlock title="Dans SKILL.md" lang="markdown">
+              <pre><code>{`Lis la config dans \${CLAUDE_SKILL_DIR}/config.json.
+Si absent, demande a l'utilisateur :
+- Quel channel Slack ?
+- Quels repos inclure ?
+Sauvegarde les reponses dans config.json.`}</code></pre>
+            </CodeBlock>
+          </Accordion>
+
+          <Accordion title="Hooks temporaires (on-demand)">
+            <p class="text-sand-500 text-sm mb-3">Un skill peut activer des hooks uniquement pendant son execution — parfait pour des garde-fous temporaires.</p>
+            <CodeBlock title="careful/SKILL.md — mode prudent" lang="yaml">
+              <pre><code>{`---
+name: careful
+disable-model-invocation: true
+hooks:
+  PreToolUse:
+    - matcher: Bash
+      hooks:
+        - type: command
+          command: |
+            if echo "$TOOL_INPUT" | grep -qE 'rm -rf|DROP TABLE|--force'; then
+              echo '{"decision":"block","reason":"Bloque par /careful"}'
+            fi
 ---
 
-Quand tu expliques du code, inclus toujours :
+Mode prudent active. Les commandes destructives sont bloquees.`}</code></pre>
+            </CodeBlock>
+          </Accordion>
 
-1. **Analogie** : Compare avec quelque chose du quotidien
-2. **Diagramme** : Utilise de l'ASCII art pour montrer le flux
-3. **Pas a pas** : Explication etape par etape
-4. **Piege** : Erreur courante ou malentendu`}</code></pre>
-      </CodeBlock>
-    </section>
+          <Accordion title="Memoire entre sessions">
+            <p class="text-sand-500 text-sm">Un skill peut stocker des donnees (logs, JSON) pour garder un historique. Exemple : un skill standup qui relit ses posts precedents pour ne montrer que le delta. Utilise <code>$&#123;CLAUDE_PLUGIN_DATA&#125;</code> pour un dossier stable qui survit aux mises a jour.</p>
+          </Accordion>
 
-  </main>
+          <Accordion title="Exemple complet : review de PR">
+            <CodeBlock title="review-pr/SKILL.md" lang="yaml">
+              <pre><code>{`---
+name: review-pr
+description: Review la PR courante avec focus securite et patterns du projet
+disable-model-invocation: true
+allowed-tools: Read, Grep, Glob, Bash
+---
+
+## Contexte
+- Diff : !\`gh pr diff\`
+- Description : !\`gh pr view\`
+
+## Instructions
+1. Lis le diff complet
+2. Verifie : pas de secrets, pas d'injection SQL, pas de XSS
+3. Verifie les patterns du projet (cf CLAUDE.md)
+4. Liste par severite (critique > important > mineur)
+5. Propose des corrections avec snippets`}</code></pre>
+            </CodeBlock>
+          </Accordion>
+        </div>
+      </section>
+
+      <!-- Legacy -->
+      <div class="mb-14 p-4 bg-sand-50 border border-sand-200 rounded-lg">
+        <p class="text-sm text-sand-600"><strong class="text-claude-brown">Legacy :</strong> les fichiers dans <code>.claude/commands/</code> continuent de fonctionner. Mais <code>.claude/skills/</code> est recommande. En cas de conflit, le skill a la priorite.</p>
+      </div>
+
+      <!-- Sources -->
+      <section id="sources" class="pt-8 border-t border-sand-200 scroll-mt-20">
+        <h2 class="font-display text-lg text-claude-brown mb-3">Sources</h2>
+        <ul class="space-y-1.5 text-sm text-sand-500">
+          <li><a href="https://x.com/trq212/status/2033949937936085378" class="text-claude-orange hover:underline">Thariq (Anthropic) — "Lessons from Building Claude Code: How We Use Skills"</a></li>
+          <li><a href="https://docs.anthropic.com/en/docs/claude-code/skills" class="text-claude-orange hover:underline">Documentation officielle — Skills</a></li>
+          <li><a href="https://github.com/anthropics/skills" class="text-claude-orange hover:underline">anthropics/skills</a> — repo officiel avec Skill Creator, simplify, batch, debug</li>
+          <li><a href="https://anthropic.skilljar.com/introduction-to-agent-skills" class="text-claude-orange hover:underline">Cours Skilljar — Introduction to Agent Skills</a></li>
+          <li><a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills" class="text-claude-orange hover:underline">Anthropic Engineering — Equipping Agents with Skills</a></li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- Table des matieres sticky (desktop) -->
+    <aside class="hidden lg:block">
+      <nav class="sticky top-20">
+        <p class="text-xs font-semibold text-sand-400 uppercase tracking-wider mb-3">Sur cette page</p>
+        <ul class="space-y-2 text-[0.8125rem] border-l border-sand-200 pl-3" id="toc">
+          <li><a href="#definition" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">C'est quoi un skill ?</a></li>
+          <li><a href="#anatomie" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Anatomie</a></li>
+          <li><a href="#types" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Quel skill creer ?</a></li>
+          <li><a href="#regles" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Les regles</a></li>
+          <li><a href="#structure" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Structure</a></li>
+          <li><a href="#frontmatter" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Frontmatter</a></li>
+          <li><a href="#variables" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Variables</a></li>
+          <li><a href="#creer" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Creer un skill</a></li>
+          <li><a href="#installer" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Installer & partager</a></li>
+          <li><a href="#avance" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Avance</a></li>
+          <li><a href="#sources" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Sources</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+  </div>
   <Footer />
 </Layout>
+
+<script>
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const sections = document.querySelectorAll('section[id]');
+
+  function updateToc() {
+    let current = '';
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= 100) {
+        current = section.id;
+      }
+    });
+
+    tocLinks.forEach(link => {
+      const isActive = link.getAttribute('href') === `#${current}`;
+      link.classList.toggle('text-claude-orange', isActive);
+      link.classList.toggle('font-medium', isActive);
+      link.classList.toggle('text-sand-500', !isActive);
+    });
+  }
+
+  window.addEventListener('scroll', updateToc, { passive: true });
+  updateToc();
+</script>

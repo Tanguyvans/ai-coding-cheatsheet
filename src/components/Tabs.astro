@@ -1,0 +1,62 @@
+---
+interface Props {
+  tabs: string[];
+  id: string;
+}
+
+const { tabs, id } = Astro.props;
+---
+
+<div class="tabs-container" data-tabs-id={id}>
+  <div class="flex gap-1 border-b border-sand-200 mb-4" role="tablist">
+    {tabs.map((tab, i) => (
+      <button
+        role="tab"
+        aria-selected={i === 0 ? 'true' : 'false'}
+        data-tab-index={i}
+        class:list={[
+          'px-4 py-2 text-sm font-medium rounded-t-md transition-colors border-b-2 -mb-px',
+          i === 0
+            ? 'text-claude-orange border-claude-orange bg-claude-orange/5'
+            : 'text-sand-500 border-transparent hover:text-claude-brown hover:bg-sand-50',
+        ]}
+      >
+        {tab}
+      </button>
+    ))}
+  </div>
+  <slot />
+</div>
+
+<style>
+  .tab-panel[data-tab-index]:not(.active) {
+    display: none;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.tabs-container').forEach(container => {
+    const buttons = container.querySelectorAll('[role="tab"]');
+    const panels = container.querySelectorAll('.tab-panel');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const index = btn.getAttribute('data-tab-index');
+
+        buttons.forEach(b => {
+          const isActive = b.getAttribute('data-tab-index') === index;
+          b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          b.className = `px-4 py-2 text-sm font-medium rounded-t-md transition-colors border-b-2 -mb-px ${
+            isActive
+              ? 'text-claude-orange border-claude-orange bg-claude-orange/5'
+              : 'text-sand-500 border-transparent hover:text-claude-brown hover:bg-sand-50'
+          }`;
+        });
+
+        panels.forEach(p => {
+          p.classList.toggle('active', p.getAttribute('data-tab-index') === index);
+        });
+      });
+    });
+  });
+</script>

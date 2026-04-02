@@ -1,0 +1,21 @@
+---
+interface Props {
+  title: string;
+  open?: boolean;
+}
+
+const { title, open = false } = Astro.props;
+const id = `acc-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+---
+
+<details class="group border border-sand-200 rounded-lg bg-white overflow-hidden" open={open}>
+  <summary class="flex items-center justify-between gap-2 px-4 py-3 cursor-pointer select-none hover:bg-sand-50 transition-colors list-none [&::-webkit-details-marker]:hidden">
+    <span class="font-display text-sm font-semibold text-claude-brown">{title}</span>
+    <svg class="w-4 h-4 text-sand-400 shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </summary>
+  <div class="px-4 pb-4 pt-1">
+    <slot />
+  </div>
+</details>

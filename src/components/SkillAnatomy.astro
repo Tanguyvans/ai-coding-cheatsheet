@@ -1,0 +1,94 @@
+---
+// Visual anatomy of a SKILL.md file with annotation lines
+---
+
+<div class="w-full overflow-x-auto">
+  <svg viewBox="0 0 780 420" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full max-w-3xl mx-auto" role="img" aria-label="Anatomie d'un fichier SKILL.md">
+
+    <!-- Document background -->
+    <rect x="40" y="20" width="360" height="380" rx="8" fill="#faf8f5" stroke="#e8e0d4" stroke-width="1.5" />
+
+    <!-- Document header tab -->
+    <rect x="40" y="20" width="360" height="32" rx="8" fill="#f3efe8" stroke="#e8e0d4" stroke-width="1.5" />
+    <rect x="40" y="44" width="360" height="8" fill="#f3efe8" />
+    <text x="60" y="42" font-family="'JetBrains Mono', monospace" font-size="11" fill="#9c8568">SKILL.md</text>
+
+    <!-- Frontmatter block -->
+    <rect x="56" y="64" width="328" height="100" rx="4" fill="#1f1a14" opacity="0.95" />
+    <text x="72" y="82" font-family="'JetBrains Mono', monospace" font-size="10" fill="#9c8568">---</text>
+    <text x="72" y="98" font-family="'JetBrains Mono', monospace" font-size="10">
+      <tspan fill="#e07c3e">name</tspan><tspan fill="#9c8568">: </tspan><tspan fill="#e2ddd5">review-pr</tspan>
+    </text>
+    <text x="72" y="114" font-family="'JetBrains Mono', monospace" font-size="10">
+      <tspan fill="#e07c3e">description</tspan><tspan fill="#9c8568">: </tspan><tspan fill="#e2ddd5">Review la PR courante</tspan>
+    </text>
+    <text x="72" y="130" font-family="'JetBrains Mono', monospace" font-size="10">
+      <tspan fill="#e07c3e">disable-model-invocation</tspan><tspan fill="#9c8568">: </tspan><tspan fill="#e2ddd5">true</tspan>
+    </text>
+    <text x="72" y="146" font-family="'JetBrains Mono', monospace" font-size="10">
+      <tspan fill="#e07c3e">allowed-tools</tspan><tspan fill="#9c8568">: </tspan><tspan fill="#e2ddd5">Read, Grep, Bash</tspan>
+    </text>
+    <text x="72" y="158" font-family="'JetBrains Mono', monospace" font-size="10" fill="#9c8568">---</text>
+
+    <!-- Context block -->
+    <text x="56" y="190" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="bold" fill="#4a3728">## Contexte</text>
+    <text x="56" y="208" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">- Diff : <tspan fill="#e07c3e">!`gh pr diff`</tspan></text>
+    <text x="56" y="224" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">- Desc : <tspan fill="#e07c3e">!`gh pr view`</tspan></text>
+
+    <!-- Instructions block -->
+    <text x="56" y="256" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="bold" fill="#4a3728">## Instructions</text>
+    <text x="56" y="274" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">1. Lis le diff complet</text>
+    <text x="56" y="290" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">2. Verifie : secrets, SQL, XSS</text>
+    <text x="56" y="306" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">3. Verifie les patterns</text>
+    <text x="56" y="322" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">4. Liste par severite</text>
+    <text x="56" y="338" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">5. Propose des corrections</text>
+
+    <!-- Gotchas reference -->
+    <text x="56" y="370" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">Consulte aussi <tspan fill="#e07c3e">gotchas.md</tspan></text>
+    <text x="56" y="386" font-family="'JetBrains Mono', monospace" font-size="10" fill="#5e4f3d">dans ce dossier.</text>
+
+    <!-- ===== Annotation lines & labels ===== -->
+
+    <!-- 1. name -->
+    <line x1="384" y1="95" x2="440" y2="95" stroke="#e07c3e" stroke-width="1" stroke-dasharray="4 2" />
+    <circle cx="440" cy="95" r="3" fill="#e07c3e" />
+    <text x="452" y="92" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600" fill="#4a3728">name</text>
+    <text x="452" y="107" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">Devient la commande /review-pr</text>
+
+    <!-- 2. description -->
+    <line x1="384" y1="114" x2="440" y2="140" stroke="#e07c3e" stroke-width="1" stroke-dasharray="4 2" />
+    <circle cx="440" cy="140" r="3" fill="#e07c3e" />
+    <text x="452" y="137" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600" fill="#4a3728">description</text>
+    <text x="452" y="152" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">Trigger — Claude lit ca pour decider</text>
+    <text x="452" y="165" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">d'activer le skill automatiquement</text>
+
+    <!-- 3. disable-model-invocation -->
+    <line x1="384" y1="130" x2="440" y2="200" stroke="#e07c3e" stroke-width="1" stroke-dasharray="4 2" />
+    <circle cx="440" cy="200" r="3" fill="#e07c3e" />
+    <text x="452" y="197" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600" fill="#4a3728">garde-fou</text>
+    <text x="452" y="212" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">Empeche Claude de le declencher</text>
+    <text x="452" y="225" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">tout seul — toi seul decides</text>
+
+    <!-- 4. Dynamic injection -->
+    <line x1="384" y1="208" x2="440" y2="268" stroke="#e07c3e" stroke-width="1" stroke-dasharray="4 2" />
+    <circle cx="440" cy="268" r="3" fill="#e07c3e" />
+    <text x="452" y="265" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600" fill="#4a3728">injection dynamique</text>
+    <text x="452" y="280" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">!`commande` injecte la sortie</text>
+    <text x="452" y="293" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">au chargement du skill</text>
+
+    <!-- 5. Instructions -->
+    <line x1="384" y1="290" x2="440" y2="330" stroke="#e07c3e" stroke-width="1" stroke-dasharray="4 2" />
+    <circle cx="440" cy="330" r="3" fill="#e07c3e" />
+    <text x="452" y="327" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600" fill="#4a3728">instructions</text>
+    <text x="452" y="342" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">Donne du contexte et des contraintes</text>
+    <text x="452" y="355" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">sans micro-manager chaque etape</text>
+
+    <!-- 6. Gotchas reference -->
+    <line x1="384" y1="375" x2="440" y2="390" stroke="#e07c3e" stroke-width="1" stroke-dasharray="4 2" />
+    <circle cx="440" cy="390" r="3" fill="#e07c3e" />
+    <text x="452" y="387" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600" fill="#4a3728">fichiers de support</text>
+    <text x="452" y="402" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">Claude les lit a la demande —</text>
+    <text x="452" y="415" font-family="'Space Grotesk', sans-serif" font-size="10.5" fill="#9c8568">progressive disclosure</text>
+
+  </svg>
+</div>
