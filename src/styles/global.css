@@ -17,8 +17,16 @@
   --color-claude-cream: #f9f5ef;
   --color-claude-brown: #4a3728;
 
+  --color-ink: #2a2520;
+  --color-ink-soft: #5e4f3d;
+  --color-ink-faint: #9c8568;
+  --color-highlight: #ffe08a;
+  --color-paper: #faf8f5;
+
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Space Grotesk', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;
+  --font-hand-body: 'Kalam', cursive;
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 }
 
@@ -70,4 +78,37 @@
     background-color: var(--color-claude-orange);
     color: white;
   }
+}
+
+@layer utilities {
+  .font-hand { font-family: var(--font-hand); }
+  .font-hand-body { font-family: var(--font-hand-body); }
+
+  .sketch-box {
+    border: 1.5px solid var(--color-ink);
+    border-radius: 8px 5px 9px 4px / 4px 8px 5px 9px;
+    background: #fff;
+  }
+  .sketch-box-thick {
+    border-width: 2.5px;
+  }
+  .sketch-box-1 { border-radius: 6px 9px 4px 8px / 7px 5px 8px 4px; }
+  .sketch-box-2 { border-radius: 9px 4px 7px 5px / 5px 9px 4px 8px; }
+  .sketch-box-3 { border-radius: 5px 8px 6px 9px / 8px 4px 9px 5px; }
+  .sketch-box-4 { border-radius: 7px 5px 9px 4px / 6px 8px 4px 9px; }
+  .sketch-box-5 { border-radius: 8px 6px 5px 9px / 4px 7px 8px 6px; }
+  .sketch-box-6 { border-radius: 4px 9px 8px 5px / 9px 6px 5px 8px; }
+
+  .tilt-l { transform: rotate(-0.5deg); }
+  .tilt-r { transform: rotate(0.5deg); }
+  .tilt-l1 { transform: rotate(-1deg); }
+  .tilt-r1 { transform: rotate(1deg); }
+
+  .highlight-marker {
+    background: linear-gradient(180deg, transparent 45%, var(--color-highlight) 45%, var(--color-highlight) 90%, transparent 90%);
+    padding: 0 2px;
+  }
+
+  .dashed-top { border-top: 1.5px dashed var(--color-ink-faint); }
+  .dashed-bottom { border-bottom: 1.5px dashed var(--color-ink-faint); }
 }

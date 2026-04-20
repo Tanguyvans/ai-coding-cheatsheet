@@ -6,26 +6,37 @@ interface Props {
   goodLabel?: string;
 }
 
-const { bad, good, badLabel = 'A eviter', goodLabel = 'Recommande' } = Astro.props;
+const { bad, good, badLabel = 'à éviter', goodLabel = 'à faire' } = Astro.props;
 ---
 
 <div class="grid sm:grid-cols-2 gap-3 mb-4">
-  <div class="rounded-lg border-2 border-red-200 bg-red-50/50 p-4">
-    <div class="flex items-center gap-2 mb-2">
-      <span class="flex items-center justify-center w-5 h-5 rounded-full bg-red-100 text-red-500 text-xs font-bold">&times;</span>
-      <span class="text-xs font-semibold text-red-400 uppercase tracking-wide">{badLabel}</span>
+  <!-- GOOD (left) -->
+  <div
+    class="sketch-box sketch-box-3 p-3.5"
+    style="background: #f0f5ed; border-color: #2a5a2a;"
+  >
+    <div class="flex items-center gap-1.5 mb-2">
+      <span class="font-hand font-bold text-[18px] text-[#2a5a2a]">
+        ✓ {goodLabel}
+      </span>
     </div>
-    <div class="text-[0.8125rem] text-sand-700 leading-relaxed [&>code]:bg-red-100/80 [&>code]:text-red-700">
-      <Fragment set:html={bad} />
+    <div class="font-hand-body text-[13px] text-[color:var(--color-ink-soft)] leading-snug [&>code]:bg-[#d6e6d1] [&>code]:text-[#2a5a2a] [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded [&>code]:font-mono [&>code]:text-[0.85em]">
+      <Fragment set:html={good} />
     </div>
   </div>
-  <div class="rounded-lg border-2 border-green-200 bg-green-50/50 p-4">
-    <div class="flex items-center gap-2 mb-2">
-      <span class="flex items-center justify-center w-5 h-5 rounded-full bg-green-100 text-green-600 text-xs font-bold">&check;</span>
-      <span class="text-xs font-semibold text-green-500 uppercase tracking-wide">{goodLabel}</span>
+
+  <!-- BAD (right) -->
+  <div
+    class="sketch-box sketch-box-4 p-3.5"
+    style="background: #f8ecec; border-color: #9a3a3a;"
+  >
+    <div class="flex items-center gap-1.5 mb-2">
+      <span class="font-hand font-bold text-[18px] text-[#9a3a3a]">
+        ✗ {badLabel}
+      </span>
     </div>
-    <div class="text-[0.8125rem] text-sand-700 leading-relaxed [&>code]:bg-green-100/80 [&>code]:text-green-700">
-      <Fragment set:html={good} />
+    <div class="font-hand-body text-[13px] text-[color:var(--color-ink-soft)] leading-snug [&>code]:bg-[#ecd6d6] [&>code]:text-[#9a3a3a] [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded [&>code]:font-mono [&>code]:text-[0.85em]">
+      <Fragment set:html={bad} />
     </div>
   </div>
 </div>

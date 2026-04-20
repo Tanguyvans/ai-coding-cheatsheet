@@ -1,76 +1,75 @@
 ---
 const base = import.meta.env.BASE_URL;
 const pathname = Astro.url.pathname;
-
 const b = base.endsWith('/') ? base : `${base}/`;
 
 const pages = [
-  { href: b, label: 'Accueil' },
-  { href: `${b}commands/`, label: 'Commandes' },
+  { href: `${b}getting-started/`, label: 'Démarrer' },
   { href: `${b}skills/`, label: 'Skills' },
-  { href: `${b}hooks/`, label: 'Hooks & MCP' },
-  { href: `${b}claude-md/`, label: 'CLAUDE.md' },
-  { href: `${b}tips/`, label: 'Tips' },
+  { href: `${b}hooks/`, label: 'Hooks' },
+  { href: `${b}hooks/`, label: 'MCP' },
+  { href: `${b}claude-md/`, label: 'Settings' },
 ];
 
 function isActive(href: string) {
-  if (href === base) return pathname === base || pathname === base.slice(0, -1);
   return pathname.startsWith(href);
 }
 ---
 
-<nav class="sticky top-0 z-50 bg-sand-50/90 backdrop-blur-sm border-b border-sand-200/80">
-  <div class="max-w-5xl mx-auto px-5 sm:px-8">
-    <div class="flex items-center justify-between h-14">
-      <a href={base} class="font-display text-xl text-claude-brown hover:text-claude-orange transition-colors tracking-tight font-bold">
-        Claude Code <span class="text-claude-orange">Cheatsheet</span>
-      </a>
+<nav class="border-b-[1.5px] border-[color:var(--color-ink)] bg-[color:var(--color-paper)] sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-5 sm:px-7 h-[52px] flex items-center justify-between gap-4">
+    <a href={base} class="flex items-center gap-2.5 shrink-0">
+      <svg width="22" height="22" viewBox="0 0 22 22" class="block">
+        <path d="M 11 2 L 20 18 L 2 18 Z" stroke="var(--color-ink)" stroke-width="1.8" fill="none" stroke-linejoin="round" />
+        <circle cx="11" cy="13" r="1.8" fill="var(--color-claude-orange)" />
+      </svg>
+      <span class="font-hand text-[22px] font-semibold text-[color:var(--color-ink)]">ai-coding-cheatsheet</span>
+    </a>
 
-      <!-- Desktop nav -->
-      <div class="hidden md:flex items-center gap-0.5">
-        {pages.map(p => (
-          <a
-            href={p.href}
-            class:list={[
-              'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-all',
-              isActive(p.href)
-                ? 'text-claude-orange bg-claude-orange/8'
-                : 'text-sand-600 hover:text-claude-brown hover:bg-sand-100',
-            ]}
-          >
-            {p.label}
-          </a>
-        ))}
-      </div>
-
-      <!-- Mobile hamburger -->
-      <button
-        id="mobile-menu-btn"
-        class="md:hidden p-2 -mr-2 text-sand-500 hover:text-claude-brown transition-colors"
-        aria-label="Menu"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Mobile nav -->
-    <div id="mobile-menu" class="hidden md:hidden pb-4 -mx-1">
+    <!-- Desktop nav -->
+    <div class="hidden md:flex gap-6 font-hand-body text-[15px]">
       {pages.map(p => (
         <a
           href={p.href}
           class:list={[
-            'block px-3 py-2 text-sm font-medium rounded-md transition-all',
+            'transition-colors pb-0.5',
             isActive(p.href)
-              ? 'text-claude-orange bg-claude-orange/8'
-              : 'text-sand-600 hover:text-claude-brown hover:bg-sand-100',
+              ? 'text-[color:var(--color-claude-orange)] border-b-[1.5px] border-[color:var(--color-claude-orange)]'
+              : 'text-[color:var(--color-ink-soft)] hover:text-[color:var(--color-claude-orange)]',
           ]}
         >
           {p.label}
         </a>
       ))}
     </div>
+
+    <div class="hidden md:block sketch-box sketch-box-4 px-2.5 py-1 font-mono text-[11px] text-[color:var(--color-ink-soft)] shrink-0">
+      ⌘K rechercher
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button id="mobile-menu-btn" class="md:hidden p-2 -mr-2 text-[color:var(--color-ink-soft)]" aria-label="Menu">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile nav -->
+  <div id="mobile-menu" class="hidden md:hidden px-5 pb-4 font-hand-body text-[15px]">
+    {pages.map(p => (
+      <a
+        href={p.href}
+        class:list={[
+          'block py-2',
+          isActive(p.href)
+            ? 'text-[color:var(--color-claude-orange)]'
+            : 'text-[color:var(--color-ink-soft)]',
+        ]}
+      >
+        {p.label}
+      </a>
+    ))}
   </div>
 </nav>
 

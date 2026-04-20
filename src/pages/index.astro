@@ -6,78 +6,82 @@ import Footer from '../components/Footer.astro';
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 
-const sections = [
-  {
-    title: 'Commandes',
-    description: 'Slash commands, CLI flags et options pour piloter Claude Code.',
-    href: `${base}commands/`,
-    icon: '/',
-  },
-  {
-    title: 'Skills',
-    description: 'Creer des skills personnalises pour etendre les capacites de Claude.',
-    href: `${base}skills/`,
-    icon: '&#9881;',
-  },
-  {
-    title: 'Hooks & MCP',
-    description: 'Automatiser avec les hooks et connecter des outils externes via MCP.',
-    href: `${base}hooks/`,
-    icon: '&#9889;',
-  },
-  {
-    title: 'CLAUDE.md',
-    description: 'Configurer le projet, les permissions et le comportement de Claude.',
-    href: `${base}claude-md/`,
-    icon: '&#128221;',
-  },
-  {
-    title: 'Tips',
-    description: 'Bonnes pratiques, raccourcis et astuces pour etre plus efficace.',
-    href: `${base}tips/`,
-    icon: '&#128161;',
-  },
+const categories = [
+  { title: 'Skills',       count: '12 skills',       icon: '✦', href: `${base}skills/`,    accent: true },
+  { title: 'Hooks',        count: '8 hooks',         icon: '↯', href: `${base}hooks/`,     accent: false },
+  { title: 'Commandes /',  count: '24 cmds',         icon: '/', href: `${base}commands/`,  accent: false },
+  { title: 'MCP Servers',  count: '15 serveurs',     icon: '◈', href: `${base}hooks/`,     accent: false },
+  { title: 'Settings',     count: '30+ options',     icon: '⚙', href: `${base}claude-md/`, accent: false },
+  { title: 'Prompts',      count: "Par cas d'usage", icon: '✎', href: `${base}tips/`,      accent: false },
+];
+
+const tilts = ['tilt-l', 'tilt-r', 'tilt-l', 'tilt-r', 'tilt-l', 'tilt-r'];
+const boxes = ['sketch-box-1', 'sketch-box-2', 'sketch-box-3', 'sketch-box-4', 'sketch-box-5', 'sketch-box-6'];
+
+const titleAlts = [
+  '« Guide Claude »',
+  '« Claude Code, en clair »',
+  '« Cheatsheet Claude Code »',
+  '« Le petit manuel »',
 ];
 ---
 
-<Layout title="Claude Code Cheatsheet — Le guide de reference">
+<Layout title="ai-coding-cheatsheet — Le guide Claude Code">
   <Navbar />
 
-  <!-- Hero -->
-  <header class="bg-gradient-to-b from-claude-cream to-sand-50 border-b border-sand-200/80">
-    <div class="max-w-5xl mx-auto px-5 sm:px-8 pt-16 sm:pt-24 pb-12 sm:pb-16">
-      <div class="max-w-2xl">
-        <p class="text-sm font-medium text-claude-orange mb-4 tracking-wide uppercase">Guide de reference</p>
-        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl text-claude-brown leading-[1.1] mb-5">
-          Maitriser<br />
-          <span class="text-claude-orange">Claude Code</span>
-        </h1>
-        <p class="text-sand-500 text-base sm:text-lg leading-relaxed max-w-lg mb-8">
-          Commandes, skills, hooks, MCP, settings — tout ce qu'il faut pour tirer le meilleur de Claude Code, au meme endroit.
-        </p>
-        <div class="flex flex-wrap gap-3">
-          <a href={`${base}commands/`} class="inline-flex items-center gap-2 px-5 py-2.5 bg-claude-orange text-white text-sm font-semibold rounded-lg hover:bg-claude-orange/90 transition-colors">
-
-            Commencer
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-          </a>
-          <a href="https://github.com/tanguyvans/ai-coding-cheatsheet" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-claude-brown text-sm font-semibold rounded-lg border border-sand-200 hover:border-claude-orange/30 transition-colors">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-            GitHub
-          </a>
-        </div>
-      </div>
+  <header class="px-5 pt-10 sm:pt-14 pb-2 text-center">
+    <h1 class="font-hand font-bold text-[44px] sm:text-[56px] text-[color:var(--color-ink)] leading-[1.1] mb-3">
+      <span class="highlight-marker">Le guide Claude Code.</span>
+    </h1>
+    <p class="font-hand-body text-base sm:text-lg text-[color:var(--color-ink-soft)] mb-3">
+      Référence rapide : skills, hooks, commandes, MCP, settings.
+    </p>
+    <div class="font-hand text-[15px] text-[color:var(--color-ink-faint)] flex gap-3.5 justify-center flex-wrap">
+      <span>alts :</span>
+      {titleAlts.map((alt, i) => (
+        <span>{i > 0 ? '· ' : ''}{alt}</span>
+      ))}
     </div>
   </header>
 
-  <!-- Sections grid -->
-  <main class="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {sections.map(s => (
-        <a href={s.href} class="group block bg-white rounded-lg border border-sand-200 p-5 hover:border-claude-orange/30 hover:shadow-md hover:shadow-claude-orange/5 transition-all duration-200 hover:-translate-y-0.5">
-          <span class="text-2xl mb-3 block" set:html={s.icon} />
-          <h2 class="font-display text-lg text-claude-brown group-hover:text-claude-orange transition-colors mb-1.5">{s.title}</h2>
-          <p class="text-[0.8125rem] text-sand-500 leading-relaxed">{s.description}</p>
+  <!-- CTA row -->
+  <div class="text-center mt-6 mb-8 px-5">
+    <div class="inline-flex items-center gap-3 flex-wrap justify-center">
+      <a
+        href={`${base}getting-started/`}
+        class="sketch-box sketch-box-thick sketch-box-4 inline-flex items-center gap-2 px-[18px] py-2 font-hand font-bold text-[22px] text-[color:var(--color-ink)] hover:-translate-y-0.5 transition-transform"
+        style="background: #fef4a8; transform: rotate(-1.2deg);"
+      >
+        → Démarrer en 4 min
+      </a>
+      <span class="font-hand-body text-[14px] text-[color:var(--color-ink-faint)]">
+        ou explore ci-dessous
+      </span>
+    </div>
+  </div>
+
+  <main class="max-w-5xl mx-auto px-5 sm:px-10 pb-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {categories.map((c, i) => (
+        <a
+          href={c.href}
+          class:list={[
+            'sketch-box', boxes[i % boxes.length], tilts[i % tilts.length],
+            'block p-5 pb-4 bg-white hover:bg-[color:var(--color-paper)] transition-all hover:-translate-y-0.5',
+          ]}
+        >
+          <div class:list={[
+            'font-mono text-[22px] mb-1.5',
+            c.accent ? 'text-[color:var(--color-claude-orange)]' : 'text-[color:var(--color-ink)]',
+          ]}>
+            {c.icon}
+          </div>
+          <div class="font-hand font-bold text-[24px] text-[color:var(--color-ink)] leading-tight mb-1">
+            {c.title}
+          </div>
+          <div class="font-mono text-[11px] text-[color:var(--color-ink-faint)]">
+            {c.count}
+          </div>
         </a>
       ))}
     </div>

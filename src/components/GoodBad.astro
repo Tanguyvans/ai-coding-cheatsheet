@@ -1,0 +1,51 @@
+---
+interface PromptExample {
+  prompt: string;
+  why: string;
+}
+
+interface Props {
+  good: PromptExample;
+  bad: PromptExample;
+  goodLabel?: string;
+  badLabel?: string;
+}
+
+const { good, bad, goodLabel = 'à faire', badLabel = 'à éviter' } = Astro.props;
+---
+
+<div class="grid sm:grid-cols-2 gap-3 max-w-3xl">
+  <!-- GOOD -->
+  <div
+    class="sketch-box sketch-box-3 p-3"
+    style="background: #f0f5ed; border-color: #2a5a2a;"
+  >
+    <div class="font-hand font-bold text-[18px] text-[#2a5a2a] mb-1.5">
+      ✓ {goodLabel}
+    </div>
+    <pre
+      class="bg-sand-900 text-sand-100 font-mono text-[11px] leading-relaxed px-2.5 py-2 mb-1.5 overflow-x-auto"
+      style="border-radius: 6px 9px 4px 8px / 7px 5px 8px 4px;"
+    ><span class="text-[color:var(--color-claude-orange)]">&gt;</span> {good.prompt}</pre>
+    <p class="font-hand-body text-[12px] text-[color:var(--color-ink-soft)] leading-snug">
+      {good.why}
+    </p>
+  </div>
+
+  <!-- BAD -->
+  <div
+    class="sketch-box sketch-box-4 p-3"
+    style="background: #f8ecec;"
+  >
+    <div class="font-hand font-bold text-[18px] text-[#9a3a3a] mb-1.5">
+      ✗ {badLabel}
+    </div>
+    <pre
+      class="bg-sand-900 text-sand-100 font-mono text-[11px] leading-relaxed px-2.5 py-2 mb-1.5 overflow-x-auto"
+      style="border-radius: 7px 5px 9px 4px / 6px 8px 4px 9px;"
+    ><span class="text-[color:var(--color-claude-orange)] no-underline inline-block">&gt;</span> <span style="text-decoration: line-through; text-decoration-color: #9a3a3a;">{bad.prompt}</span></pre>
+    <p class="font-hand-body text-[12px] text-[color:var(--color-ink-soft)] leading-snug">
+      {bad.why}
+    </p>
+  </div>
+</div>

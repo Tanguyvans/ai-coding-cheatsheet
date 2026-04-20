@@ -2,14 +2,33 @@
 interface Props {
   title: string;
   description: string;
+  breadcrumb?: string;
+  highlight?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, breadcrumb, highlight } = Astro.props;
+// If highlight is provided, split title around first occurrence. Otherwise highlight the whole title.
+let before = '', marked = title, after = '';
+if (highlight && title.includes(highlight)) {
+  const idx = title.indexOf(highlight);
+  before = title.slice(0, idx);
+  marked = highlight;
+  after = title.slice(idx + highlight.length);
+}
 ---
 
-<div class="border-b border-sand-200/80 bg-gradient-to-b from-claude-cream to-sand-50">
-  <div class="max-w-5xl mx-auto px-5 sm:px-8 pt-12 pb-8">
-    <h1 class="font-display text-3xl sm:text-4xl text-claude-brown mb-3">{title}</h1>
-    <p class="text-sand-500 max-w-xl text-[0.9375rem] leading-relaxed">{description}</p>
+<div class="border-b border-[color:var(--color-ink-faint)]/40 bg-[color:var(--color-paper)]">
+  <div class="max-w-6xl mx-auto px-5 sm:px-7 pt-6 pb-8">
+    {breadcrumb && (
+      <div class="font-mono text-[10px] text-[color:var(--color-ink-faint)] mb-3">
+        {breadcrumb}
+      </div>
+    )}
+    <h1 class="font-hand font-bold text-[34px] sm:text-[40px] text-[color:var(--color-ink)] leading-[1.1] mb-2">
+      {before}<span class="highlight-marker">{marked}</span>{after}
+    </h1>
+    <p class="font-hand-body text-[color:var(--color-ink-soft)] max-w-2xl text-[15px] leading-relaxed">
+      {description}
+    </p>
   </div>
 </div>

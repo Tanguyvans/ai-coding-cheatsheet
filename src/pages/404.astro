@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+---
+
+<Layout title="404 — cheatsheet.fr">
+  <Navbar />
+
+  <main class="flex-1 flex items-center justify-center px-5 py-20">
+    <div class="text-center max-w-md">
+      <div
+        class="font-hand font-bold text-[120px] sm:text-[140px] leading-none text-[color:var(--color-ink)] mb-3"
+        style="transform: rotate(-2deg);"
+      >
+        4<span class="text-[color:var(--color-claude-orange)]">0</span>4
+      </div>
+
+      <div class="flex justify-center mb-5">
+        <svg width="180" height="6" viewBox="0 0 180 6" aria-hidden="true">
+          <path
+            d="M 0 3 Q 30 0, 60 3 T 120 3 T 180 3"
+            stroke="var(--color-claude-orange)" stroke-width="1.5" fill="none" stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <p class="font-hand-body text-[16px] text-[color:var(--color-ink-soft)] mb-6">
+        Cette commande n'existe pas (encore). Essaie la recherche — elle trouve à peu près tout.
+      </p>
+
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a
+          href={base}
+          class="sketch-box sketch-box-thick sketch-box-3 px-4 py-1.5 font-hand text-[18px] text-[color:var(--color-ink)] hover:-translate-y-0.5 transition-transform"
+          style="background: #fef4a8;"
+        >
+          ← retour accueil
+        </a>
+        <button
+          type="button"
+          class="sketch-box sketch-box-5 px-4 py-1.5 font-hand text-[18px] text-[color:var(--color-ink)] bg-white hover:-translate-y-0.5 transition-transform"
+        >
+          ⌘K rechercher
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

@@ -28,17 +28,17 @@ import SkillAnatomy from '../../components/SkillAnatomy.astro';
         <p class="text-sand-600 text-sm leading-relaxed mb-4">Un skill, c'est un dossier avec un fichier <code>SKILL.md</code> qui donne a Claude un <strong>playbook</strong> pour une tache precise. Contrairement aux commandes internes (<code>/help</code>, <code>/compact</code>), un skill est base sur un prompt : Claude recoit les instructions et orchestre le travail avec ses outils.</p>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <Card title="Reutilisable" badge="gain">
+          <Card title="Reutilisable" badge="1 fois, toutes les sessions">
             Encode un workflow une fois, reutilise-le dans toutes tes sessions.
           </Card>
-          <Card title="Auto-decouvert" badge="magie">
-            Claude active le skill automatiquement quand c'est pertinent — sans taper <code>/</code>.
+          <Card title="Auto-decouvert" badge="sans taper /">
+            Claude active le skill automatiquement quand c'est pertinent.
           </Card>
-          <Card title="Riche" badge="puissance">
+          <Card title="Riche" badge="dossier complet">
             Embarque templates, exemples, scripts, et sortie de commandes shell.
           </Card>
-          <Card title="Partageable" badge="equipe">
-            Committe <code>.claude/skills/</code> dans git — toute l'equipe en profite.
+          <Card title="Partageable" badge="via git">
+            Committe <code>.claude/skills/</code> — toute l'equipe en profite.
           </Card>
         </div>
 
@@ -59,22 +59,22 @@ import SkillAnatomy from '../../components/SkillAnatomy.astro';
         <p class="text-sand-500 text-sm mb-4">Apres des centaines de skills en production, Anthropic a identifie des categories recurrentes.</p>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <Card title="Reference de lib / API" badge="connaissance">
+          <Card title="Reference de lib / API" badge="doc interne">
             Comment utiliser correctement une lib, un SDK ou un CLI interne. Inclut des snippets et une liste de gotchas.
           </Card>
-          <Card title="Verification produit" badge="qualite">
-            Tester que le code marche — couple avec Playwright ou un headless browser. Le plus rentable a perfectionner.
+          <Card title="Verification produit" badge="le + rentable">
+            Tester que le code marche — couple avec Playwright ou un headless browser.
           </Card>
-          <Card title="Scaffolding & templates" badge="template">
+          <Card title="Scaffolding & templates" badge="boilerplate">
             Genere du boilerplate specifique a ton codebase : nouveau service, migration, app preconfiguree.
           </Card>
-          <Card title="Qualite & review" badge="review">
+          <Card title="Qualite & review" badge="CI/hooks">
             Verifie le style, les tests, ou lance une review adversariale. Peut tourner en hook ou GitHub Action.
           </Card>
-          <Card title="Automatisation d'equipe" badge="workflow">
+          <Card title="Automatisation d'equipe" badge="standup, tickets">
             Automatise les workflows repetitifs : standup, creation de tickets, recap hebdo.
           </Card>
-          <Card title="Runbooks & debugging" badge="ops">
+          <Card title="Runbooks & debugging" badge="investigation">
             Prend un symptome (alerte, erreur) et deroule une investigation multi-outils avec rapport.
           </Card>
         </div>
@@ -85,19 +85,37 @@ import SkillAnatomy from '../../components/SkillAnatomy.astro';
         <h2 class="font-display text-2xl text-claude-brown mb-2">Les regles d'un bon skill</h2>
         <p class="text-sand-500 text-sm mb-4">Ce qu'Anthropic a appris apres des centaines de skills en production.</p>
 
-        <div class="grid sm:grid-cols-2 gap-3 mb-4">
-          <Card title="Construis un fichier gotchas" badge="essentiel">
-            Le contenu le plus rentable. A chaque erreur de Claude, note-la dans <code>gotchas.md</code>. Apres quelques iterations, ton skill devient inarretable.
+        <div class="grid sm:grid-cols-2 gap-3 mb-6">
+          <Card title="Construis un fichier gotchas" badge="le + rentable">
+            A chaque erreur de Claude, note-la dans <code>gotchas.md</code>. Apres quelques iterations, ton skill devient inarretable.
           </Card>
-          <Card title="La description declenche, pas resume" badge="trigger">
+          <Card title="Ne dis pas l'evident" badge="gain de contexte">
+            Claude sait coder. Focus sur les patterns de ton projet, les conventions non evidentes, les exceptions.
+          </Card>
+          <Card title="Contexte, pas des rails" badge="adaptabilite">
+            Un skill trop prescriptif empeche Claude de s'adapter. Donne les contraintes et l'info, pas le chemin exact.
+          </Card>
+          <Card title="La description declenche" badge="auto-activation">
             Claude scanne les descriptions pour activer les skills. Decris <em>quand</em> l'utiliser, pas ce qu'il fait.
           </Card>
-          <Card title="Ne dis pas l'evident" badge="focus">
-            Claude sait coder. Focus sur ce qui le sort de ses reflexes — les patterns de ton projet, les conventions non evidentes.
-          </Card>
-          <Card title="Contexte, pas des rails" badge="liberte">
-            Un skill trop prescriptif empeche Claude de s'adapter. Donne les contraintes et l'info, laisse-le choisir le chemin.
-          </Card>
+        </div>
+
+        <div class="p-4 bg-white border border-sand-200 rounded-lg space-y-3">
+          <p class="text-xs font-semibold text-sand-400 uppercase tracking-wide">Exemple de description</p>
+          <div class="flex items-start gap-2">
+            <span class="text-red-400 text-sm mt-0.5 font-bold shrink-0">&times;</span>
+            <div>
+              <code class="text-xs text-sand-600">description: Aide avec le frontend</code>
+              <p class="text-xs text-sand-400 mt-0.5">Trop vague — Claude ne sait pas quand activer</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-green-500 text-sm mt-0.5 font-bold shrink-0">&check;</span>
+            <div>
+              <code class="text-xs text-sand-600">description: Quand on cree des composants React avec notre design system. Charge les patterns et les tokens.</code>
+              <p class="text-xs text-sand-400 mt-0.5">Declencheur precis — Claude active au bon moment</p>
+            </div>
+          </div>
         </div>
 
         <Accordion title="Exemple de fichier gotchas.md">
@@ -176,7 +194,8 @@ Tes instructions ici...`}</code></pre>
             ['$ARGUMENTS', 'Tous les arguments passes au skill'],
             ['$0, $1, $2...', 'Arguments par position'],
             ['${CLAUDE_SESSION_ID}', 'ID de la session en cours'],
-            ['${CLAUDE_SKILL_DIR}', 'Dossier du skill (pour acceder aux scripts, config...)'],
+            ['${CLAUDE_SKILL_DIR}', 'Dossier du skill (scripts, config, references...)'],
+            ['${CLAUDE_PLUGIN_DATA}', 'Dossier stable pour stocker des donnees entre sessions'],
           ]}
         />
 
@@ -217,30 +236,46 @@ Resume cette PR en bullet points concis.`}</code></pre>
 
       <!-- Creer un skill -->
       <section id="creer" class="mb-14 scroll-mt-20">
-        <h2 class="font-display text-2xl text-claude-brown mb-4">Creer un skill</h2>
+        <h2 class="font-display text-2xl text-claude-brown mb-2">Creer un skill</h2>
+        <p class="text-sand-500 text-sm mb-4">Trois facons de creer un skill selon ton contexte.</p>
 
-        <Tabs tabs={['A la main', 'Avec le Skill Creator']} id="creation-method">
+        <Tabs tabs={['Claude Code (CLI)', 'Chat (claude.ai)', 'Cowork']} id="creation-method">
           <div class="tab-panel active" data-tab-index="0">
+            <p class="text-sand-500 text-sm mb-3">Cree le dossier et le fichier manuellement, ou demande a Claude de le faire.</p>
             <CodeBlock title="Terminal" lang="bash">
               <pre><code>{`# Skill projet (partage via git)
 mkdir -p .claude/skills/mon-skill
 
 # Skill personnel (tous tes projets)
-mkdir -p ~/.claude/skills/mon-skill`}</code></pre>
+mkdir -p ~/.claude/skills/mon-skill
+
+# Puis cree SKILL.md dans le dossier`}</code></pre>
             </CodeBlock>
-            <p class="text-sand-500 text-sm mt-3">Cree <code>SKILL.md</code> dans le dossier avec le frontmatter et tes instructions. C'est tout.</p>
+            <p class="text-sand-500 text-sm mt-3">Tu peux aussi demander directement a Claude :</p>
+            <CodeBlock title="Dans Claude Code" lang="text">
+              <pre><code>{`> Cree un skill "review-pr" qui review la PR courante
+  avec focus securite. Il ne doit pas se declencher seul.`}</code></pre>
+            </CodeBlock>
           </div>
 
           <div class="tab-panel" data-tab-index="1">
-            <p class="text-sand-500 text-sm mb-3">Un meta-skill du repo <a href="https://github.com/anthropics/skills" class="text-claude-orange hover:underline">anthropics/skills</a> qui te guide depuis le chat.</p>
-            <CodeBlock title="Terminal" lang="bash">
-              <pre><code>{`# Installer le plugin
-/plugin marketplace add anthropics/skills
-
-# Lancer le Skill Creator
-/skill-creator`}</code></pre>
+            <p class="text-sand-500 text-sm mb-3">Depuis l'interface web claude.ai, tu peux demander a Claude de generer un skill complet. Il te retourne le contenu du SKILL.md que tu copies dans ton projet.</p>
+            <CodeBlock title="Dans le chat claude.ai" lang="text">
+              <pre><code>{`> Genere-moi un skill Claude Code pour review de PR.
+  Il doit injecter le diff avec gh, verifier la securite,
+  et ne pas se declencher automatiquement.`}</code></pre>
             </CodeBlock>
-            <p class="text-sand-500 text-sm mt-3">Claude te pose des questions, genere le SKILL.md avec les bons fichiers de support, puis le teste.</p>
+            <p class="text-sand-500 text-sm mt-3">Claude genere le frontmatter, les instructions et les fichiers de support. Tu copies le resultat dans <code>.claude/skills/</code>.</p>
+          </div>
+
+          <div class="tab-panel" data-tab-index="2">
+            <p class="text-sand-500 text-sm mb-3">En mode Cowork, Claude travaille en arriere-plan sur ton codebase. Tu peux lui demander de creer un skill et il ecrit directement les fichiers dans ton projet.</p>
+            <CodeBlock title="Cowork" lang="text">
+              <pre><code>{`> Cree un skill "review-pr" dans .claude/skills/.
+  Regarde comment les autres skills du projet sont
+  structures et suis le meme format.`}</code></pre>
+            </CodeBlock>
+            <p class="text-sand-500 text-sm mt-3">L'avantage : Claude a acces au contexte complet du projet et peut s'inspirer des skills existants.</p>
           </div>
         </Tabs>
       </section>
@@ -287,77 +322,12 @@ mkdir -p ~/.claude/skills/mon-skill`}</code></pre>
         </div>
 
         <div class="grid sm:grid-cols-2 gap-3 mt-4">
-          <Card title="anthropics/skills" badge="officiel">
+          <Card title="anthropics/skills" badge="repo officiel">
             Skills officiels : skill-creator, simplify, batch, claude-api, debug, loop. <a href="https://github.com/anthropics/skills" class="text-claude-orange hover:underline">GitHub</a>
           </Card>
-          <Card title="awesome-claude-skills" badge="communaute">
-            Collection communautaire : TDD, securite, Playwright, D3.js, shadcn/ui... <a href="https://github.com/travisvn/awesome-claude-skills" class="text-claude-orange hover:underline">GitHub</a>
+          <Card title="awesome-claude-skills" badge="liste communautaire">
+            TDD, securite (Trail of Bits), Playwright, D3.js, shadcn/ui... <a href="https://github.com/travisvn/awesome-claude-skills" class="text-claude-orange hover:underline">GitHub</a>
           </Card>
-        </div>
-      </section>
-
-      <!-- Techniques avancees -->
-      <section id="avance" class="mb-14 scroll-mt-20">
-        <h2 class="font-display text-2xl text-claude-brown mb-4">Techniques avancees</h2>
-
-        <div class="space-y-3">
-          <Accordion title="Config utilisateur persistante">
-            <p class="text-sand-500 text-sm mb-3">Si ton skill a besoin d'info de l'utilisateur (channel Slack, projet...), stocke-la dans un <code>config.json</code>. Claude le lit ou le demande si absent.</p>
-            <CodeBlock title="Dans SKILL.md" lang="markdown">
-              <pre><code>{`Lis la config dans \${CLAUDE_SKILL_DIR}/config.json.
-Si absent, demande a l'utilisateur :
-- Quel channel Slack ?
-- Quels repos inclure ?
-Sauvegarde les reponses dans config.json.`}</code></pre>
-            </CodeBlock>
-          </Accordion>
-
-          <Accordion title="Hooks temporaires (on-demand)">
-            <p class="text-sand-500 text-sm mb-3">Un skill peut activer des hooks uniquement pendant son execution — parfait pour des garde-fous temporaires.</p>
-            <CodeBlock title="careful/SKILL.md — mode prudent" lang="yaml">
-              <pre><code>{`---
-name: careful
-disable-model-invocation: true
-hooks:
-  PreToolUse:
-    - matcher: Bash
-      hooks:
-        - type: command
-          command: |
-            if echo "$TOOL_INPUT" | grep -qE 'rm -rf|DROP TABLE|--force'; then
-              echo '{"decision":"block","reason":"Bloque par /careful"}'
-            fi
----
-
-Mode prudent active. Les commandes destructives sont bloquees.`}</code></pre>
-            </CodeBlock>
-          </Accordion>
-
-          <Accordion title="Memoire entre sessions">
-            <p class="text-sand-500 text-sm">Un skill peut stocker des donnees (logs, JSON) pour garder un historique. Exemple : un skill standup qui relit ses posts precedents pour ne montrer que le delta. Utilise <code>$&#123;CLAUDE_PLUGIN_DATA&#125;</code> pour un dossier stable qui survit aux mises a jour.</p>
-          </Accordion>
-
-          <Accordion title="Exemple complet : review de PR">
-            <CodeBlock title="review-pr/SKILL.md" lang="yaml">
-              <pre><code>{`---
-name: review-pr
-description: Review la PR courante avec focus securite et patterns du projet
-disable-model-invocation: true
-allowed-tools: Read, Grep, Glob, Bash
----
-
-## Contexte
-- Diff : !\`gh pr diff\`
-- Description : !\`gh pr view\`
-
-## Instructions
-1. Lis le diff complet
-2. Verifie : pas de secrets, pas d'injection SQL, pas de XSS
-3. Verifie les patterns du projet (cf CLAUDE.md)
-4. Liste par severite (critique > important > mineur)
-5. Propose des corrections avec snippets`}</code></pre>
-            </CodeBlock>
-          </Accordion>
         </div>
       </section>
 
@@ -394,7 +364,6 @@ allowed-tools: Read, Grep, Glob, Bash
           <li><a href="#variables" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Variables</a></li>
           <li><a href="#creer" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Creer un skill</a></li>
           <li><a href="#installer" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Installer & partager</a></li>
-          <li><a href="#avance" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Avance</a></li>
           <li><a href="#sources" class="toc-link text-sand-500 hover:text-claude-orange transition-colors block">Sources</a></li>
         </ul>
       </nav>

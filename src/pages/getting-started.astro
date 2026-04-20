@@ -1,0 +1,282 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import GoodBad from '../components/GoodBad.astro';
+
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+
+const steps = [
+  {
+    n: 1,
+    title: 'Installer Claude Code',
+    body: 'Via npm. Nécessite Node 22+.',
+    code: 'npm install -g @anthropic/claude-code',
+    kind: 'shell' as const,
+  },
+  {
+    n: 2,
+    title: 'Se connecter',
+    body: "Un navigateur s'ouvre pour l'auth Anthropic. Connexion via compte Claude ou clé API.",
+    code: 'claude login',
+    kind: 'shell' as const,
+  },
+  {
+    n: 3,
+    title: 'Lancer dans un projet',
+    body: 'Se place dans le dossier courant. Lit CLAUDE.md si présent.',
+    code: 'cd mon-projet && claude',
+    kind: 'shell' as const,
+  },
+  {
+    n: 4,
+    title: 'Initialiser CLAUDE.md',
+    body: "Le fichier de contexte du projet : stack, conventions, commandes. Claude s'en sert à chaque session.",
+    code: '/init',
+    kind: 'slash' as const,
+  },
+  {
+    n: 5,
+    title: 'Premier prompt',
+    body: 'Décris ce que tu veux faire. Plus c\'est précis, mieux Claude répond.',
+    code: 'Ajoute des tests unitaires pour utils.ts',
+    kind: 'prompt' as const,
+  },
+];
+
+const stepBoxes = ['sketch-box-1', 'sketch-box-3', 'sketch-box-5', 'sketch-box-2', 'sketch-box-6'];
+
+const essentials = [
+  { cmd: '/help',    desc: 'Liste toutes les commandes' },
+  { cmd: '/clear',   desc: 'Efface le contexte, repart à neuf' },
+  { cmd: '/compact', desc: 'Résume pour économiser des tokens' },
+  { cmd: '/cost',    desc: 'Coût de la session en cours' },
+  { cmd: '/resume',  desc: 'Reprend une conversation précédente' },
+  { cmd: '/model',   desc: 'Change de modèle' },
+];
+
+const nextSteps = [
+  { title: 'Skills',   desc: 'Workflows réutilisables', icon: '✦', href: `${base}skills/` },
+  { title: 'Hooks',    desc: 'Automatiser avec des scripts', icon: '↯', href: `${base}hooks/` },
+  { title: 'Settings', desc: 'CLAUDE.md & permissions', icon: '⚙', href: `${base}claude-md/` },
+  { title: 'Tips',     desc: 'Bonnes pratiques', icon: '✎', href: `${base}tips/` },
+];
+---
+
+<Layout title="Démarrer — ai-coding-cheatsheet">
+  <Navbar />
+
+  <main class="max-w-5xl mx-auto px-5 sm:px-8 pt-10 pb-16">
+    <div class="font-mono text-[10px] text-[color:var(--color-ink-faint)] mb-3">
+      Accueil › Démarrer
+    </div>
+    <h1 class="font-hand font-bold text-[40px] sm:text-[52px] text-[color:var(--color-ink)] leading-[1.05] mb-2">
+      <span class="highlight-marker">Démarrer</span> avec Claude Code
+    </h1>
+    <p class="font-hand-body text-[16px] text-[color:var(--color-ink-soft)] mb-10 max-w-2xl">
+      De zéro à productif en quelques minutes. Installation, premier projet, premières commandes.
+    </p>
+
+    <div class="lg:grid lg:grid-cols-[1fr_260px] lg:gap-10">
+      <div class="min-w-0">
+        <!-- Prerequisites sticky note -->
+        <aside
+          class="sketch-box sketch-box-thick sketch-box-2 p-4 mb-10 max-w-xl"
+          style="background: #fef4a8; transform: rotate(-0.6deg);"
+        >
+          <div class="flex items-start gap-3">
+            <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" class="shrink-0 mt-0.5">
+              <circle cx="14" cy="14" r="11" stroke="var(--color-ink)" stroke-width="1.6" fill="none" />
+              <path d="M 14 8 L 14 15" stroke="var(--color-ink)" stroke-width="1.6" stroke-linecap="round" />
+              <circle cx="14" cy="19" r="1.2" fill="var(--color-ink)" />
+            </svg>
+            <div>
+              <div class="font-hand font-bold text-[20px] text-[color:var(--color-ink)] mb-1">
+                Avant de commencer
+              </div>
+              <ul class="font-hand-body text-[14px] text-[color:var(--color-ink-soft)] leading-snug space-y-0.5">
+                <li>• <strong>Node 22+</strong> installé <code class="font-mono text-[12px]">node --version</code></li>
+                <li>• Un compte <strong>Claude</strong> ou une clé API Anthropic</li>
+                <li>• Terminal bash / zsh (macOS, Linux, WSL)</li>
+              </ul>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Steps -->
+        <ol class="space-y-8">
+          {steps.map((s, i) => (
+            <li class="flex gap-4 sm:gap-5">
+              <div
+                class:list={[
+                  'sketch-box sketch-box-thick flex-shrink-0 w-11 h-11',
+                  'flex items-center justify-center',
+                  stepBoxes[i % stepBoxes.length],
+                  i % 2 === 0 ? 'tilt-l1' : 'tilt-r1',
+                ]}
+                style={i === 0 ? 'background: #fef4a8;' : 'background: #fff;'}
+              >
+                <span class="font-hand font-bold text-[22px] text-[color:var(--color-ink)]">{s.n}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="font-hand font-bold text-[24px] text-[color:var(--color-ink)] mb-1">
+                  {s.title}
+                </div>
+                <p class="font-hand-body text-[14px] text-[color:var(--color-ink-soft)] mb-3 max-w-xl">
+                  {s.body}
+                </p>
+
+                <!-- Fake sketchy terminal window -->
+                <div
+                  class="sketch-box sketch-box-thick sketch-box-3 overflow-hidden max-w-xl"
+                  style="background: #1f1a14;"
+                >
+                  <div class="flex items-center gap-1.5 px-3 py-1.5 border-b border-sand-800">
+                    {[0,1,2].map(() => (
+                      <span class="w-2.5 h-2.5 rounded-full border border-sand-600"></span>
+                    ))}
+                    <span class="ml-2 font-mono text-[10px] text-[color:var(--color-ink-faint)]">
+                      {s.kind === 'shell' ? 'terminal' : s.kind === 'slash' ? 'claude' : 'prompt'}
+                    </span>
+                  </div>
+                  <pre class="font-mono text-[12.5px] leading-relaxed text-sand-100 px-4 py-3 overflow-x-auto m-0 bg-transparent border-0">{s.kind === 'shell' ? (
+                    <><span class="text-[color:var(--color-ink-faint)]">$ </span>{s.code}</>
+                  ) : s.kind === 'slash' ? (
+                    <><span class="text-[color:var(--color-claude-orange)]">claude</span><span class="text-[color:var(--color-ink-faint)]"> › </span>{s.code}</>
+                  ) : (
+                    <><span class="text-[color:var(--color-claude-orange)]">{'>'}</span> {s.code}</>
+                  )}</pre>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <!-- Good / Bad prompt example -->
+        <section class="mt-12 max-w-xl">
+          <h2 class="font-hand font-bold text-[28px] text-[color:var(--color-ink)] mb-1">
+            <span class="highlight-marker">Écrire</span> un bon premier prompt
+          </h2>
+          <p class="font-hand-body text-[14px] text-[color:var(--color-ink-soft)] mb-5">
+            Un prompt précis économise 10 itérations.
+          </p>
+          <GoodBad
+            good={{
+              prompt: 'Ajoute des tests Jest pour src/utils/date.ts — toutes les exports, edge cases inclus.',
+              why: "Fichier ciblé, framework précisé, portée claire. Claude livre au 1er coup.",
+            }}
+            bad={{
+              prompt: 'Écris des tests',
+              why: "Aucun contexte : quels fichiers ? quel framework ? Claude devra deviner.",
+            }}
+          />
+        </section>
+
+        <!-- Essential commands -->
+        <section class="mt-12 max-w-xl">
+          <h2 class="font-hand font-bold text-[28px] text-[color:var(--color-ink)] mb-1">
+            <span class="highlight-marker">Commandes</span> essentielles
+          </h2>
+          <p class="font-hand-body text-[14px] text-[color:var(--color-ink-soft)] mb-5">
+            À taper directement dans le prompt. Les 6 qui reviennent tout le temps.
+          </p>
+          <div class="grid sm:grid-cols-2 gap-x-8 gap-y-1">
+            {essentials.map(c => (
+              <div class="flex items-baseline gap-3 py-2 border-b border-dashed border-[color:var(--color-ink-faint)]/50">
+                <span class="font-mono text-[13px] text-[color:var(--color-claude-orange)] font-medium shrink-0 min-w-[78px]">
+                  {c.cmd}
+                </span>
+                <span class="font-hand-body text-[13px] text-[color:var(--color-ink-soft)]">
+                  {c.desc}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div class="mt-4 font-hand text-[16px] text-[color:var(--color-ink-faint)]">
+            ↗ <a href={`${base}commands/`} class="text-[color:var(--color-claude-orange)] hover:underline">voir les 24 commandes</a>
+          </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section class="mt-12 max-w-xl">
+          <h2 class="font-hand font-bold text-[28px] text-[color:var(--color-ink)] mb-4">
+            <span class="highlight-marker">Ça coince ?</span>
+          </h2>
+          <div class="space-y-3">
+            <details class="sketch-box sketch-box-4 bg-white p-3">
+              <summary class="font-hand font-bold text-[17px] text-[color:var(--color-ink)] cursor-pointer">
+                « command not found: claude »
+              </summary>
+              <p class="font-hand-body text-[13px] text-[color:var(--color-ink-soft)] mt-2">
+                Le global npm n'est pas dans ton <code class="font-mono text-[12px]">$PATH</code>. Ajoute <code class="font-mono text-[12px]">$(npm config get prefix)/bin</code> dans ton <code class="font-mono text-[12px]">~/.zshrc</code>.
+              </p>
+            </details>
+            <details class="sketch-box sketch-box-1 bg-white p-3">
+              <summary class="font-hand font-bold text-[17px] text-[color:var(--color-ink)] cursor-pointer">
+                « Node version too old »
+              </summary>
+              <p class="font-hand-body text-[13px] text-[color:var(--color-ink-soft)] mt-2">
+                Installe Node 22+ via <a href="https://github.com/nvm-sh/nvm" class="text-[color:var(--color-claude-orange)] hover:underline">nvm</a> : <code class="font-mono text-[12px]">nvm install 22 && nvm use 22</code>.
+              </p>
+            </details>
+            <details class="sketch-box sketch-box-5 bg-white p-3">
+              <summary class="font-hand font-bold text-[17px] text-[color:var(--color-ink)] cursor-pointer">
+                Permission denied sur un outil
+              </summary>
+              <p class="font-hand-body text-[13px] text-[color:var(--color-ink-soft)] mt-2">
+                Normal — Claude demande avant d'écrire/exécuter. Approuve ponctuellement, ou liste les autorisations dans <code class="font-mono text-[12px]">.claude/settings.json</code>.
+              </p>
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <!-- Aller plus loin sidebar -->
+      <aside class="mt-16 lg:mt-0">
+        <div class="lg:sticky lg:top-[72px]">
+          <div class="font-mono text-[10px] text-[color:var(--color-ink-faint)] tracking-wider mb-3 uppercase">
+            Aller plus loin
+          </div>
+          <div class="space-y-2.5">
+            {nextSteps.map((n, i) => (
+              <a
+                href={n.href}
+                class:list={[
+                  'sketch-box block p-3 bg-white hover:bg-[color:var(--color-paper)] transition-all hover:-translate-y-0.5',
+                  i % 2 === 0 ? 'sketch-box-2 tilt-l' : 'sketch-box-4 tilt-r',
+                ]}
+              >
+                <div class="flex items-baseline gap-2.5">
+                  <span class="font-mono text-[16px] text-[color:var(--color-claude-orange)]">{n.icon}</span>
+                  <div>
+                    <div class="font-hand font-bold text-[18px] text-[color:var(--color-ink)] leading-none">
+                      {n.title}
+                    </div>
+                    <div class="font-hand-body text-[12px] text-[color:var(--color-ink-soft)] mt-0.5">
+                      {n.desc}
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div
+            class="mt-6 sketch-box sketch-box-6 p-3"
+            style="background: #f0f5ed; transform: rotate(-0.8deg);"
+          >
+            <div class="font-hand font-bold text-[17px] text-[#2a5a2a] mb-1">
+              ✓ Astuce
+            </div>
+            <p class="font-hand-body text-[12.5px] text-[color:var(--color-ink-soft)] leading-snug">
+              Commence par créer un <code class="font-mono text-[11px]">CLAUDE.md</code> avec <code class="font-mono text-[11px]">/init</code>. C'est le plus gros gain de qualité.
+            </p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
